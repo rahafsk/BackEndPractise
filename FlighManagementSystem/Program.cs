@@ -210,11 +210,11 @@ namespace FlightManagementSystem.Models
                         break;
 
                     case "3":
-                        // AddAircraft();
+                        AddAircraft();
                         break;
 
                     case "4":
-                        //CreateFlight();
+                        ViewAllFlights();
                         break;
 
                     case "5":
