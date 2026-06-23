@@ -167,13 +167,13 @@ namespace FlightManagementSystem.Models
             Console.Clear();
             Console.WriteLine("===== View All Flights =====");
 
-            if (!context.Flights.Any())
+            if (!context.Flights.Any()) // Any() checks if the list has at least one item
             {
                 Console.WriteLine("No flights found.");
                 return;
             }
 
-            foreach (Flight flight in context.Flights)
+            foreach (Flight flight in context.Flights) // This loop goes through every flight inside the Flights list.
             {
                 Console.WriteLine("----------------------------------");
                 Console.WriteLine("Flight Code: " + flight.flightCode);
