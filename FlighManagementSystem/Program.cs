@@ -167,7 +167,7 @@ namespace FlightManagementSystem.Models
             Console.Clear();
             Console.WriteLine("===== View All Flights =====");
 
-            if (!context.Flights.Any()) // Any() checks if the list has at least one item
+            if (!context.Flights.Any()) // 
             {
                 Console.WriteLine("No flights found.");
                 return;
@@ -199,6 +199,12 @@ namespace FlightManagementSystem.Models
             var operationalAircrafts = context.Aircrafts
                 .Where(a => a.isOperational == true)
                 .ToList();
+            /*
+             * This gets all aircrafts that are operational.
+             * context.Aircrafts is the list of all aircrafts.
+             * .Where(a => a.isOperational == true) means: Take only aircrafts where isOperational is true.
+             * .ToList() converts the result into a list.
+             */
 
             if (!operationalAircrafts.Any())
             {
@@ -209,6 +215,11 @@ namespace FlightManagementSystem.Models
             var availablePilots = context.Pilots
                 .Where(p => p.isAvailable == true)
                 .ToList();
+            /*
+             * This gets all pilots who are available.
+             * context.Pilots is the list of all pilots.
+             * .Where(p => p.isAvailable == true) means: Take only pilots where isAvailable is true.
+             */
 
             if (!availablePilots.Any())
             {
@@ -216,6 +227,7 @@ namespace FlightManagementSystem.Models
                 return;
             }
 
+            // This prints all operational aircrafts for the user to choose from.
             Console.WriteLine("\nOperational Aircrafts:");
             foreach (Aircraft aircraft in operationalAircrafts)
             {
@@ -233,8 +245,8 @@ namespace FlightManagementSystem.Models
                 return;
             }
 
-            Aircraft selectedAircraft = operationalAircrafts
-                .FirstOrDefault(a => a.aircraftId == aircraftId);
+            Aircraft selectedAircraft = operationalAircrafts // This searches for the aircraft with the ID entered by the user.
+                .FirstOrDefault(a => a.aircraftId == aircraftId); // FirstOrDefault() means: Find the first aircraft that matches. If nothing is found, return null
 
             if (selectedAircraft == null)
             {
@@ -281,7 +293,7 @@ namespace FlightManagementSystem.Models
             string time = Console.ReadLine();
 
             Console.Write("Enter ticket price: ");
-            decimal price;
+            decimal price; // decimal is used for money.
 
             if (!decimal.TryParse(Console.ReadLine(), out price))
             {
@@ -297,11 +309,12 @@ namespace FlightManagementSystem.Models
 
             int flightId = context.Flights.Count + 1;
 
+            //This creates a new flight and fills its data.
             Flight flight = new Flight
             {
                 flightId = flightId,
-                flightCode = "FMS-" + flightId.ToString("000"),
-                aircraftId = selectedAircraft.aircraftId,
+                flightCode = "FMS-" + flightId.ToString("000"), // This generates a flight code automatically.
+                aircraftId = selectedAircraft.aircraftId, // This connects the flight to the selected aircraft.
                 pilotId = selectedPilot.pilotId,
                 origin = origin,
                 destination = destination,
@@ -313,9 +326,9 @@ namespace FlightManagementSystem.Models
                 status = "Scheduled"
             };
 
-            context.Flights.Add(flight);
+            context.Flights.Add(flight); //This adds the new flight to the system.
 
-            selectedPilot.isAvailable = false;
+            selectedPilot.isAvailable = false; // After assigning the pilot to a flight, the pilot becomes unavailable.
 
             Console.WriteLine("Flight scheduled successfully.");
             Console.WriteLine("Flight Code: " + flight.flightCode);
@@ -374,7 +387,7 @@ namespace FlightManagementSystem.Models
                         break;
 
                     case "5":
-                        //ViewPassengers();
+                        ScheduleFlight();
                         break;
 
                     case "6":
