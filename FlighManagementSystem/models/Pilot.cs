@@ -9,8 +9,9 @@ namespace FlightManagementSystem.Models
         public int pilotId { get; set; }
         public string pilotName { get; set; }
         public string licenseNumber { get; set; }
-        public int experienceYears { get; set; }
+        public string pilotPhone { get; set; }
         public bool isAvailable { get; set; }
+        public int FlightHours { get; set; }
 
     }
 }
