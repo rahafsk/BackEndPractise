@@ -182,7 +182,138 @@ namespace FlightManagementSystem.Models
         // ==========================================================
         // 5. View Passengers
         // ==========================================================
-         
+
+        public static void ScheduleFlight()
+        {
+            Console.Clear();
+            Console.WriteLine("===== Schedule Flight =====");
+
+            var operationalAircrafts = context.Aircrafts
+                .Where(a => a.isOperational == true)
+                .ToList();
+
+            if (!operationalAircrafts.Any())
+            {
+                Console.WriteLine("No operational aircraft available.");
+                return;
+            }
+
+            var availablePilots = context.Pilots
+                .Where(p => p.isAvailable == true)
+                .ToList();
+
+            if (!availablePilots.Any())
+            {
+                Console.WriteLine("No available pilots found.");
+                return;
+            }
+
+            Console.WriteLine("\nOperational Aircrafts:");
+            foreach (Aircraft aircraft in operationalAircrafts)
+            {
+                Console.WriteLine("ID: " + aircraft.aircraftId +
+                                  " | Model: " + aircraft.Model +
+                                  " | Seats: " + aircraft.totalSeats);
+            }
+
+            Console.Write("Choose aircraft ID: ");
+            int aircraftId;
+
+            if (!int.TryParse(Console.ReadLine(), out aircraftId))
+            {
+                Console.WriteLine("Invalid aircraft ID.");
+                return;
+            }
+
+            Aircraft selectedAircraft = operationalAircrafts
+                .FirstOrDefault(a => a.aircraftId == aircraftId);
+
+            if (selectedAircraft == null)
+            {
+                Console.WriteLine("Aircraft not found or not operational.");
+                return;
+            }
+
+            Console.WriteLine("\nAvailable Pilots:");
+            foreach (Pilot pilot in availablePilots)
+            {
+                Console.WriteLine("ID: " + pilot.pilotId +
+                                  " | Name: " + pilot.pilotName +
+                                  " | Flight Hours: " + pilot.FlightHours);
+            }
+
+            Console.Write("Choose pilot ID: ");
+            int pilotId;
+
+            if (!int.TryParse(Console.ReadLine(), out pilotId))
+            {
+                Console.WriteLine("Invalid pilot ID.");
+                return;
+            }
+
+            Pilot selectedPilot = availablePilots
+                .FirstOrDefault(p => p.pilotId == pilotId);
+
+            if (selectedPilot == null)
+            {
+                Console.WriteLine("Pilot not found or not available.");
+                return;
+            }
+
+            Console.Write("Enter origin: ");
+            string origin = Console.ReadLine();
+
+            Console.Write("Enter destination: ");
+            string destination = Console.ReadLine();
+
+            Console.Write("Enter departure date: ");
+            string date = Console.ReadLine();
+
+            Console.Write("Enter departure time: ");
+            string time = Console.ReadLine();
+
+            Console.Write("Enter ticket price: ");
+            decimal price;
+
+            if (!decimal.TryParse(Console.ReadLine(), out price))
+            {
+                Console.WriteLine("Invalid ticket price.");
+                return;
+            }
+
+            if (price <= 0)
+            {
+                Console.WriteLine("Ticket price must be greater than 0.");
+                return;
+            }
+
+            int flightId = context.Flights.Count + 1;
+
+            Flight flight = new Flight
+            {
+                flightId = flightId,
+                flightCode = "FMS-" + flightId.ToString("000"),
+                aircraftId = selectedAircraft.aircraftId,
+                pilotId = selectedPilot.pilotId,
+                origin = origin,
+                destination = destination,
+                departureDate = date,
+                departureTime = time,
+                ticketPrice = price,
+                totalSeats = selectedAircraft.totalSeats,
+                availableSeats = selectedAircraft.totalSeats,
+                status = "Scheduled"
+            };
+
+            context.Flights.Add(flight);
+
+            selectedPilot.isAvailable = false;
+
+            Console.WriteLine("Flight scheduled successfully.");
+            Console.WriteLine("Flight Code: " + flight.flightCode);
+        }
+
+
 
 
         // ==========================================================
