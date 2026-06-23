@@ -250,6 +250,26 @@ namespace FlightManagementSystem.Models
             Console.WriteLine("Flight created successfully.");
         }
 
+        // ==========================================================
+        // 5. View Passengers
+        // ==========================================================
+        static void ViewPassengers()
+        {
+            Console.Clear();
+            Console.WriteLine("===== All Passengers =====");
+
+            if (!context.Passengers.Any())
+            {
+                Console.WriteLine("No passengers found.");
+                return;
+            }
+
+            foreach (Passenger passenger in context.Passengers)
+            {
+                Console.WriteLine($"ID: {passenger.passengerId} | Name: {passenger.passengerName} | Phone: {passenger.passengerPhone} | Email: {passenger.passengerEmail} | Passport: {passenger.passportNumber}");
+            }
+        }
+
 
         // ==========================================================
         // Main Menu
