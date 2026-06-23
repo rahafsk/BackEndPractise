@@ -18,5 +18,42 @@ namespace FlightManagementSystem.Models
             Flights = new List<Flight>(),
             Bookings = new List<Booking>()
         };
+
+        // ==========================================================
+        // 1. Register Passenger
+        // ==========================================================
+        static void RegisterPassenger()
+        {
+            Console.Clear();
+            Console.WriteLine("===== Register Passenger =====");
+
+            int passengerId = context.Passengers.Count + 1;
+
+            Console.Write("Enter passenger name: ");
+            string name = Console.ReadLine();
+
+            Console.Write("Enter passenger phone: ");
+            string phone = Console.ReadLine();
+
+            Console.Write("Enter passenger email: ");
+            string email = Console.ReadLine();
+
+            Console.Write("Enter passport number: ");
+            string passport = Console.ReadLine();
+
+            Passenger passenger = new Passenger
+            {
+                passengerId = passengerId,
+                passengerName = name,
+                passengerPhone = phone,
+                passengerEmail = email,
+                passportNumber = passport
+            };
+
+            context.Passengers.Add(passenger);
+
+            Console.WriteLine("Passenger registered successfully.");
+        }
+
     }
 }
