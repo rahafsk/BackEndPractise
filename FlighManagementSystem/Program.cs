@@ -101,7 +101,7 @@ namespace FlightManagementSystem.Models
             Console.Clear();
             Console.WriteLine("===== Register Pilot =====");
 
-            int pilotId = context.Pilots.Count + 1;
+            int pilotId = context.Pilots.Count + 1;  // This generates a new pilot ID automatically.
 
             Console.Write("Enter pilot name: ");
             string name = Console.ReadLine();
@@ -112,8 +112,12 @@ namespace FlightManagementSystem.Models
             Console.Write("Enter license number: ");
             string license = Console.ReadLine();
 
-            bool licenseExists = context.Pilots.Any(p => p.licenseNumber == license);
-
+            bool licenseExists = context.Pilots.Any(p => p.licenseNumber == license); // This line checks if the license number already exists.
+            /*
+             * Any() means:Is there any pilot that matches this condition? 
+             * need to check if the license number is already used by another pilot.
+             * true or false!!
+             */
             if (licenseExists)
             {
                 Console.WriteLine("This license number already exists.");
@@ -124,13 +128,17 @@ namespace FlightManagementSystem.Models
             int flightHours;
 
             if (!int.TryParse(Console.ReadLine(), out flightHours))
+                /* 
+                 * Try to convert the user input into an int.
+                 * If it works, save the converted number inside flightHours.
+                 */ 
             {
                 Console.WriteLine("Invalid flight hours.");
                 return;
             }
 
-            if (flightHours < 0)
-            {
+            if (flightHours < 0)  // This checks that flight hours are not negative. (-5 is not accepted, 0 is accepted, 100 is accepted)
+{
                 Console.WriteLine("Flight hours cannot be negative.");
                 return;
             }
