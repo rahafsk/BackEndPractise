@@ -62,10 +62,10 @@ namespace FlightManagementSystem.Models
         // ==========================================================
         static void AddPilot()
         {
-             Console.Clear();
+                Console.Clear();
                 Console.WriteLine("===== Add Pilot =====");
 
-                int pilotId = context.Pilots.Count + 1;
+                int pilotId = context.Pilots.Count + 1; // This creates a new ID for the pilot. - context.Pilots.Count means how many pilots are already saved in the list.
 
                 Console.Write("Enter pilot name: ");
                 string name = Console.ReadLine();
@@ -77,7 +77,7 @@ namespace FlightManagementSystem.Models
                 string phone = Console.ReadLine();
 
                 
-                Pilot pilot = new Pilot
+                Pilot pilot = new Pilot  // This creates a new object from the Pilot class.
                 {
                     pilotId = pilotId,
                     pilotName = name,
@@ -87,7 +87,7 @@ namespace FlightManagementSystem.Models
                     isAvailable = true
                 };
 
-                context.Pilots.Add(pilot);
+                context.Pilots.Add(pilot); // This adds the new pilot object into the Pilots list.
 
                 Console.WriteLine("Pilot added successfully.");
 
