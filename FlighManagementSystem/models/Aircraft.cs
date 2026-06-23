@@ -7,10 +7,10 @@ namespace FlighManagementSystem.Models
     public class Aircraft
     {
         public int aircraftId { get; set; }
-        public string aircraftModel { get; set; }
-        public string aircraftCode { get; set; }
-        public int capacity { get; set; }
-        public bool isAvailable { get; set; }
+        public string Model { get; set; }
+        public string totalSeats { get; set; }
+        public int isOperational { get; set; }
+        
     }
 
     
