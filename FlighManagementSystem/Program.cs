@@ -128,11 +128,14 @@ namespace FlightManagementSystem.Models
             int flightHours;
 
             if (!int.TryParse(Console.ReadLine(), out flightHours))
-                /* 
-                 * Try to convert the user input into an int.
-                 * If it works, save the converted number inside flightHours.
-                 */ 
-            {
+            /* 
+             * Try to convert the user input into an int.
+             * If it works, save the converted number inside flightHours.
+             * Because TryParse needs to return two things:
+             * 1. true or false: did conversion work?
+             * 2. the converted number
+             */
+            {   
                 Console.WriteLine("Invalid flight hours.");
                 return;
             }
@@ -167,7 +170,7 @@ namespace FlightManagementSystem.Models
             Console.Clear();
             Console.WriteLine("===== View All Flights =====");
 
-            if (!context.Flights.Any()) // 
+            if (!context.Flights.Any()) 
             {
                 Console.WriteLine("No flights found.");
                 return;
@@ -334,6 +337,143 @@ namespace FlightManagementSystem.Models
             Console.WriteLine("Flight Code: " + flight.flightCode);
         }
 
+        // ==========================================================
+        // 6. Book Flight
+        // ==========================================================
+        public static void BookFlight()
+        {
+            Console.Clear();
+            Console.WriteLine("===== Book Flight =====");
+
+            if (!context.Passengers.Any())
+            {
+                Console.WriteLine("No passengers found. Register passenger first.");
+                return;
+            }
+
+            if (!context.Flights.Any(f => f.status == "Scheduled" && f.availableSeats > 0))
+            {
+                Console.WriteLine("No scheduled flights with available seats.");
+                return;
+            }
+
+            Console.WriteLine("\nPassengers:");
+            foreach (Passenger passenger in context.Passengers)
+            {
+                Console.WriteLine("ID: " + passenger.passengerId +
+                                  " | Name: " + passenger.passengerName +
+                                  " | Passport: " + passenger.passportNumber);
+            }
+
+            Console.Write("Enter passenger ID: ");
+            int passengerId;
+
+            if (!int.TryParse(Console.ReadLine(), out passengerId))
+            {
+                Console.WriteLine("Invalid passenger ID.");
+                return;
+            }
+
+            Passenger selectedPassenger = context.Passengers
+                .FirstOrDefault(p => p.passengerId == passengerId);
+
+            if (selectedPassenger == null)
+            {
+                Console.WriteLine("Passenger not found.");
+                return;
+            }
+
+            Console.Write("Enter destination: ");
+            string destination = Console.ReadLine();
+
+            var availableFlights = context.Flights
+                .Where(f => f.status == "Scheduled"
+                         && f.destination.ToLower() == destination.ToLower()
+                         && f.availableSeats > 0)
+                .ToList();
+
+            if (!availableFlights.Any())
+            {
+                Console.WriteLine("No scheduled flights found for this destination.");
+                return;
+            }
+
+            Console.WriteLine("\nAvailable Flights:");
+            foreach (Flight flight in availableFlights)
+            {
+                Console.WriteLine("ID: " + flight.flightId +
+                                  " | Code: " + flight.flightCode +
+                                  " | From: " + flight.origin +
+                                  " | To: " + flight.destination +
+                                  " | Date: " + flight.departureDate +
+                                  " | Seats: " + flight.availableSeats +
+                                  " | Price: " + flight.ticketPrice);
+            }
+
+            Console.Write("Choose flight ID: ");
+            int flightId;
+
+            if (!int.TryParse(Console.ReadLine(), out flightId))
+            {
+                Console.WriteLine("Invalid flight ID.");
+                return;
+            }
+
+            Flight selectedFlight = availableFlights
+                .FirstOrDefault(f => f.flightId == flightId);
+
+            if (selectedFlight == null)
+            {
+                Console.WriteLine("Flight not found.");
+                return;
+            }
+
+            bool alreadyBooked = context.Bookings.Any(b =>
+                b.passengerId == passengerId &&
+                b.flightId == flightId &&
+                b.status == "Confirmed");
+
+            if (alreadyBooked)
+            {
+                Console.WriteLine("This passenger already booked this flight.");
+                return;
+            }
+
+            int bookingId = context.Bookings.Count + 1;
+            string seatNumber = (selectedFlight.totalSeats - selectedFlight.availableSeats + 1) + "A";
+
+            /* 
+             * or i can do 
+             * string seatNumber = GenerateSeatNumber(selectedFlight); 
+             * but i need to do a fungtion up for the GenerateSeatNumber
+             * 
+             * static string GenerateSeatNumber(Flight flight)
+             * {
+             * int seatIndex = flight.totalSeats - flight.availableSeats + 1;
+             * return seatIndex + "A";
+             * }
+             */
+
+            Booking booking = new Booking
+            {
+                bookingId = bookingId,
+                passengerId = selectedPassenger.passengerId,
+                flightId = selectedFlight.flightId,
+                seatNumber = seatNumber,
+                bookingDate = DateTime.Now.ToString("yyyy-MM-dd"),
+                TotalPrice = selectedFlight.ticketPrice,
+                status = "Confirmed"
+            };
+
+            context.Bookings.Add(booking);
+
+            selectedFlight.availableSeats--;
+
+            Console.WriteLine("Booking created successfully.");
+            Console.WriteLine("Booking ID: " + booking.bookingId);
+            Console.WriteLine("Seat Number: " + booking.seatNumber);
+            Console.WriteLine("Total Price: " + booking.TotalPrice);
+        }
 
 
 
