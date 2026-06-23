@@ -7,7 +7,7 @@ using System.Text;
 namespace FlightManagementSystem.Models
 
 {
-    public class  Program
+    public class Program
     {
         // Main storage for the whole flight system
         public static FlightContext context = new FlightContext
@@ -50,10 +50,50 @@ namespace FlightManagementSystem.Models
                 passportNumber = passport
             };
 
+
             context.Passengers.Add(passenger);
 
             Console.WriteLine("Passenger registered successfully.");
         }
+        // ==========================================================
+        // 2. Add Pilot
+        // ==========================================================
+        static void AddPilot()
+        {
+             Console.Clear();
+                Console.WriteLine("===== Add Pilot =====");
 
+                int pilotId = context.Pilots.Count + 1;
+
+                Console.Write("Enter pilot name: ");
+                string name = Console.ReadLine();
+
+                Console.Write("Enter license number: ");
+                string license = Console.ReadLine();
+
+                Console.Write("Enter experience years: ");
+                int experienceYears;
+
+                if (!int.TryParse(Console.ReadLine(), out experienceYears))
+                {
+                    Console.WriteLine("Invalid number.");
+                    return;
+                }
+
+                Pilot pilot = new Pilot
+                {
+                    pilotId = pilotId,
+                    pilotName = name,
+                    licenseNumber = license,
+                    experienceYears = experienceYears,
+                    isAvailable = true
+                };
+
+                context.Pilots.Add(pilot);
+
+                Console.WriteLine("Pilot added successfully.");
+
+
+        }
     }
 }
