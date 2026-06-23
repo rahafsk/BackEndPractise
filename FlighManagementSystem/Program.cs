@@ -135,119 +135,31 @@ namespace FlightManagementSystem.Models
         }
 
         // ==========================================================
-        // 4. Create Flight
+        // 4. View all Flights
         // ==========================================================
-        static void CreateFlight()
+        public static void ViewAllFlights()
         {
             Console.Clear();
-            Console.WriteLine("===== Create Flight =====");
+            Console.WriteLine("===== View All Flights =====");
 
-            if (!context.Pilots.Any(p => p.isAvailable == true))
+            if (!context.Flights.Any())
             {
-                Console.WriteLine("No available pilots.");
+                Console.WriteLine("No flights found.");
                 return;
             }
 
-            if (!context.Aircrafts.Any(a => a.isAvailable == true))
+            foreach (Flight flight in context.Flights)
             {
-                Console.WriteLine("No available aircrafts.");
-                return;
+                Console.WriteLine("----------------------------------");
+                Console.WriteLine("Flight Code: " + flight.flightCode);
+                Console.WriteLine("Origin: " + flight.origin);
+                Console.WriteLine("Destination: " + flight.destination);
+                Console.WriteLine("Departure Date: " + flight.departureDate);
+                Console.WriteLine("Departure Time: " + flight.departureTime);
+                Console.WriteLine("Available Seats: " + flight.availableSeats);
+                Console.WriteLine("Ticket Price: " + flight.ticketPrice);
+                Console.WriteLine("Status: " + flight.status);
             }
-
-            int flightId = context.Flights.Count + 1;
-
-            Console.Write("Enter flight number: ");
-            string flightNumber = Console.ReadLine();
-
-            Console.WriteLine("\nAvailable Pilots:");
-            foreach (Pilot pilot in context.Pilots.Where(p => p.isAvailable == true))
-            {
-                Console.WriteLine($"ID: {pilot.pilotId} | Name: {pilot.pilotName}");
-            }
-
-            Console.Write("Choose pilot ID: ");
-            int pilotId;
-
-            if (!int.TryParse(Console.ReadLine(), out pilotId))
-            {
-                Console.WriteLine("Invalid pilot ID.");
-                return;
-            }
-
-            Pilot selectedPilot = context.Pilots.FirstOrDefault(p => p.pilotId == pilotId && p.isAvailable == true);
-
-            if (selectedPilot == null)
-            {
-                Console.WriteLine("Pilot not found or not available.");
-                return;
-            }
-
-            Console.WriteLine("\nAvailable Aircrafts:");
-            foreach (Aircraft aircraft in context.Aircrafts.Where(a => a.isAvailable == true))
-            {
-                Console.WriteLine($"ID: {aircraft.aircraftId} | Model: {aircraft.aircraftModel} | Capacity: {aircraft.capacity}");
-            }
-
-            Console.Write("Choose aircraft ID: ");
-            int aircraftId;
-
-            if (!int.TryParse(Console.ReadLine(), out aircraftId))
-            {
-                Console.WriteLine("Invalid aircraft ID.");
-                return;
-            }
-
-            Aircraft selectedAircraft = context.Aircrafts.FirstOrDefault(a => a.aircraftId == aircraftId && a.isAvailable == true);
-
-            if (selectedAircraft == null)
-            {
-                Console.WriteLine("Aircraft not found or not available.");
-                return;
-            }
-
-            Console.Write("Enter origin: ");
-            string origin = Console.ReadLine();
-
-            Console.Write("Enter destination: ");
-            string destination = Console.ReadLine();
-
-            Console.Write("Enter departure date: ");
-            string date = Console.ReadLine();
-
-            Console.Write("Enter departure time: ");
-            string time = Console.ReadLine();
-
-            Console.Write("Enter ticket price: ");
-            decimal ticketPrice;
-
-            if (!decimal.TryParse(Console.ReadLine(), out ticketPrice))
-            {
-                Console.WriteLine("Invalid ticket price.");
-                return;
-            }
-
-            Flight flight = new Flight
-            {
-                flightId = flightId,
-                flightNumber = flightNumber,
-                pilotId = selectedPilot.pilotId,
-                aircraftId = selectedAircraft.aircraftId,
-                origin = origin,
-                destination = destination,
-                departureDate = date,
-                departureTime = time,
-                ticketPrice = ticketPrice,
-                totalSeats = selectedAircraft.capacity,
-                availableSeats = selectedAircraft.capacity,
-                status = "Scheduled"
-            };
-
-            context.Flights.Add(flight);
-
-            selectedPilot.isAvailable = false;
-            selectedAircraft.isAvailable = false;
-
-            Console.WriteLine("Flight created successfully.");
         }
 
         // ==========================================================

@@ -7,7 +7,6 @@ namespace FlighManagementSystem.models
     public class Flight
     {
         public int flightId { get; set; }
-        public string flightNumber { get; set; }
         public int pilotId { get; set; }
         public int aircraftId { get; set; }
         public string origin { get; set; }
@@ -18,5 +17,6 @@ namespace FlighManagementSystem.models
         public int totalSeats { get; set; }
         public int availableSeats { get; set; }
         public string status { get; set; }
+        public string flightCode { get; set; }
     }
 }
