@@ -6,7 +6,7 @@ using System.Text;
 
 namespace FlighManagementSystem.models
 {
-    internal class FlightContext
+    public class FlightContext
     {
         public List<Passenger> Passengers { get; set; }
         public List<Pilot> Pilots { get; set; }

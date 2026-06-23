@@ -4,7 +4,7 @@ using System.Text;
 
 namespace FlighManagementSystem.models
 {
-    internal class Booking
+    public class Booking
     {
         public int bookingId { get; set; }
         public int passengerId { get; set; }

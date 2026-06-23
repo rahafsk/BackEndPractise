@@ -4,7 +4,7 @@ using System.Text;
 
 namespace FlighManagementSystem.Models
 {
-    internal class Aircraft
+    public class Aircraft
     {
         public int aircraftId { get; set; }
         public string aircraftModel { get; set; }
