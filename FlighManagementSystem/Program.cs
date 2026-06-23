@@ -95,6 +95,46 @@ namespace FlightManagementSystem.Models
 
         }
 
+        // ==========================================================
+        // 3. Add Aircraft
+        // ==========================================================
+        static void AddAircraft()
+        {
+            Console.Clear();
+            Console.WriteLine("===== Add Aircraft =====");
+
+            int aircraftId = context.Aircrafts.Count + 1;
+
+            Console.Write("Enter aircraft model: ");
+            string model = Console.ReadLine();
+
+            Console.Write("Enter aircraft code: ");
+            string code = Console.ReadLine();
+
+            Console.Write("Enter aircraft capacity: ");
+            int capacity;
+
+            if (!int.TryParse(Console.ReadLine(), out capacity))
+            {
+                Console.WriteLine("Invalid capacity.");
+                return;
+            }
+
+            Aircraft aircraft = new Aircraft
+            {
+                aircraftId = aircraftId,
+                aircraftModel = model,
+                aircraftCode = code,
+                capacity = capacity,
+                isAvailable = true
+            };
+
+            context.Aircrafts.Add(aircraft);
+
+            Console.WriteLine("Aircraft added successfully.");
+        }
+s
+
 
         // ==========================================================
         // Main Menu
