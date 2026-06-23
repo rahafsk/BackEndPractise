@@ -31,8 +31,8 @@ namespace FlightManagementSystem.Models
 
             int passengerId = context.Passengers.Count + 1;
 
-            Console.Write("Enter passenger name: ");
-            string name = Console.ReadLine();
+            Console.Write("Enter passenger name: "); // set
+            string name = Console.ReadLine(); // get
 
             Console.Write("Enter passenger phone: ");
             string phone = Console.ReadLine();
