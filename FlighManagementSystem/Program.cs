@@ -340,7 +340,7 @@ namespace FlightManagementSystem.Models
         // ==========================================================
         // 6. Book Flight
         // ==========================================================
-        public static void BookFlight()
+        public static void BookFlight() 
         {
             Console.Clear();
             Console.WriteLine("===== Book Flight =====");
@@ -358,46 +358,53 @@ namespace FlightManagementSystem.Models
             }
 
             Console.WriteLine("\nPassengers:");
-            foreach (Passenger passenger in context.Passengers)
+            foreach (Passenger passenger in context.Passengers) // Go through each passenger inside context.Passengers
             {
                 Console.WriteLine("ID: " + passenger.passengerId +
                                   " | Name: " + passenger.passengerName +
                                   " | Passport: " + passenger.passportNumber);
             }
+            
 
             Console.Write("Enter passenger ID: ");
             int passengerId;
 
+            //Validate passenger ID
             if (!int.TryParse(Console.ReadLine(), out passengerId))
             {
                 Console.WriteLine("Invalid passenger ID.");
                 return;
             }
-
+            //Find the selected passenger
             Passenger selectedPassenger = context.Passengers
                 .FirstOrDefault(p => p.passengerId == passengerId);
 
+            // Check if passenger exists
             if (selectedPassenger == null)
             {
                 Console.WriteLine("Passenger not found.");
                 return;
             }
 
+            // Ask for destination
             Console.Write("Enter destination: ");
             string destination = Console.ReadLine();
 
+            // Find available flights to that destination
             var availableFlights = context.Flights
                 .Where(f => f.status == "Scheduled"
                          && f.destination.ToLower() == destination.ToLower()
                          && f.availableSeats > 0)
                 .ToList();
 
+            // Check if no flights found
             if (!availableFlights.Any())
             {
                 Console.WriteLine("No scheduled flights found for this destination.");
                 return;
             }
 
+            // Display available flights
             Console.WriteLine("\nAvailable Flights:");
             foreach (Flight flight in availableFlights)
             {
@@ -410,35 +417,42 @@ namespace FlightManagementSystem.Models
                                   " | Price: " + flight.ticketPrice);
             }
 
+            // Ask for flight ID
             Console.Write("Choose flight ID: ");
             int flightId;
 
+            // Validate flight ID
             if (!int.TryParse(Console.ReadLine(), out flightId))
             {
                 Console.WriteLine("Invalid flight ID.");
                 return;
             }
 
+            // Find the selected flight
             Flight selectedFlight = availableFlights
                 .FirstOrDefault(f => f.flightId == flightId);
 
+            // Check if flight exists
             if (selectedFlight == null)
             {
                 Console.WriteLine("Flight not found.");
                 return;
             }
 
+            // Check if passenger already booked this flight
             bool alreadyBooked = context.Bookings.Any(b =>
                 b.passengerId == passengerId &&
                 b.flightId == flightId &&
                 b.status == "Confirmed");
 
+            // If already booked, inform the user
             if (alreadyBooked)
             {
                 Console.WriteLine("This passenger already booked this flight.");
                 return;
             }
 
+            // Create a new booking
             int bookingId = context.Bookings.Count + 1;
             string seatNumber = (selectedFlight.totalSeats - selectedFlight.availableSeats + 1) + "A";
 
@@ -454,6 +468,7 @@ namespace FlightManagementSystem.Models
              * }
              */
 
+            // Create a new booking and fill its data
             Booking booking = new Booking
             {
                 bookingId = bookingId,
@@ -465,9 +480,9 @@ namespace FlightManagementSystem.Models
                 status = "Confirmed"
             };
 
-            context.Bookings.Add(booking);
+            context.Bookings.Add(booking); 
 
-            selectedFlight.availableSeats--;
+            selectedFlight.availableSeats--; // Decrease the available seats of the flight by 1 after booking.
 
             Console.WriteLine("Booking created successfully.");
             Console.WriteLine("Booking ID: " + booking.bookingId);
