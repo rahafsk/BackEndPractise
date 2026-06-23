@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Task2_FlightManagementSystem.Models
+namespace FlightManagementSystem.Models
 {
     public class Pilot
     {
