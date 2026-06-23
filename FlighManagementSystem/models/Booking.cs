@@ -10,7 +10,8 @@ namespace FlighManagementSystem.models
         public int passengerId { get; set; }
         public int flightId { get; set; }
         public string bookingDate { get; set; }
-        public decimal ticketPrice { get; set; }
+        public decimal TotalPrice { get; set; }
         public string status { get; set; }
+        public string seatNumber { get; set; }
     }
 }
