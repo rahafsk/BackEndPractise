@@ -9,7 +9,7 @@ namespace FlighManagementSystem.Models
         public int aircraftId { get; set; }
         public string Model { get; set; }
         public string totalSeats { get; set; }
-        public int isOperational { get; set; }
+        public bool isOperational { get; set; }
         
     }
 

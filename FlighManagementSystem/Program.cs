@@ -123,10 +123,10 @@ namespace FlightManagementSystem.Models
             Aircraft aircraft = new Aircraft
             {
                 aircraftId = aircraftId,
-                aircraftModel = model,
-                aircraftCode = code,
-                capacity = capacity,
-                isAvailable = true
+                Model = model,
+                totalSeats = totalSeats,
+                isOperational = true
+                
             };
 
             context.Aircrafts.Add(aircraft);
@@ -165,44 +165,13 @@ namespace FlightManagementSystem.Models
         // ==========================================================
         // 5. View Passengers
         // ==========================================================
-        public static void ScheduleFlight()
-        {
-            Console.Clear();
-            Console.WriteLine("===== Schedule a Flight =====");
-
-            var operationalAircrafts = context.Aircrafts
-                .Where(a => a.isOperational == true)
-                .ToList();
-
-            if (!operationalAircrafts.Any())
-            {
-                Console.WriteLine("No operational aircraft available.");
-                return;
-            }
-
-            var availablePilots = context.Pilots
-                .Where(p => p.isAvailable == true)
-                .ToList();
-
-            if (!availablePilots.Any())
-            {
-                Console.WriteLine("No available pilots found.");
-                return;
-            }
-
-            Console.WriteLine("\nOperational Aircrafts:");
-            foreach (Aircraft aircraft in operationalAircrafts)
-            {
-                Console.WriteLine("ID: " + aircraft.aircraftId +
-                                  " | Model: " + aircraft.model +
-                                  " | Seats: " + aircraft.totalSeats);
-            }
+         
 
 
-            // ==========================================================
-            // Main Menu
-            // ==========================================================
-            static void Main(string[] args)
+        // ==========================================================
+        // Main Menu
+        // ==========================================================
+        static void Main(string[] args)
         {
             bool running = true;
 
