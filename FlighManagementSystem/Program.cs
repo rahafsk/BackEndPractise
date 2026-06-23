@@ -94,42 +94,61 @@ namespace FlightManagementSystem.Models
         }
 
         // ==========================================================
-        // 3. Add Aircraft
+        // 3. Register Pilot
         // ==========================================================
-        static void AddAircraft()
+        public static void RegisterPilot()
         {
             Console.Clear();
-            Console.WriteLine("===== Add Aircraft =====");
+            Console.WriteLine("===== Register Pilot =====");
 
-            int aircraftId = context.Aircrafts.Count + 1;
+            int pilotId = context.Pilots.Count + 1;
 
-            Console.Write("Enter aircraft model: ");
-            string model = Console.ReadLine();
+            Console.Write("Enter pilot name: ");
+            string name = Console.ReadLine();
 
-            Console.Write("Enter aircraft code: ");
-            string code = Console.ReadLine();
+            Console.Write("Enter pilot phone: ");
+            string phone = Console.ReadLine();
 
-            Console.Write("Enter aircraft capacity: ");
-            int capacity;
+            Console.Write("Enter license number: ");
+            string license = Console.ReadLine();
 
-            if (!int.TryParse(Console.ReadLine(), out capacity))
+            bool licenseExists = context.Pilots.Any(p => p.licenseNumber == license);
+
+            if (licenseExists)
             {
-                Console.WriteLine("Invalid capacity.");
+                Console.WriteLine("This license number already exists.");
                 return;
             }
 
-            Aircraft aircraft = new Aircraft
+            Console.Write("Enter total flight hours: ");
+            int flightHours;
+
+            if (!int.TryParse(Console.ReadLine(), out flightHours))
             {
-                aircraftId = aircraftId,
-                Model = model,
-                totalSeats = totalSeats,
-                isOperational = true
-                
+                Console.WriteLine("Invalid flight hours.");
+                return;
+            }
+
+            if (flightHours < 0)
+            {
+                Console.WriteLine("Flight hours cannot be negative.");
+                return;
+            }
+
+            Pilot pilot = new Pilot
+            {
+                pilotId = pilotId,
+                pilotName = name,
+                pilotPhone = phone,
+                licenseNumber = license,
+                FlightHours = flightHours,
+                isAvailable = true
             };
 
-            context.Aircrafts.Add(aircraft);
+            context.Pilots.Add(pilot);
 
-            Console.WriteLine("Aircraft added successfully.");
+            Console.WriteLine("Pilot registered successfully.");
+            Console.WriteLine("Pilot ID: " + pilot.pilotId);
         }
 
         // ==========================================================
@@ -208,7 +227,7 @@ namespace FlightManagementSystem.Models
                         break;
 
                     case "3":
-                        AddAircraft();
+                        RegisterPilot();
                         break;
 
                     case "4":
