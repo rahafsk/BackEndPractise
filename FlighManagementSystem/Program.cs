@@ -2,7 +2,9 @@
 using FlighManagementSystem.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
+using System.Linq;
 
 namespace FlightManagementSystem.Models
 
@@ -71,21 +73,17 @@ namespace FlightManagementSystem.Models
                 Console.Write("Enter license number: ");
                 string license = Console.ReadLine();
 
-                Console.Write("Enter experience years: ");
-                int experienceYears;
+                Console.Write("Enter phone number: ");
+                string phone = Console.ReadLine();
 
-                if (!int.TryParse(Console.ReadLine(), out experienceYears))
-                {
-                    Console.WriteLine("Invalid number.");
-                    return;
-                }
-
+                
                 Pilot pilot = new Pilot
                 {
                     pilotId = pilotId,
                     pilotName = name,
+                    pilotPhone= phone,
                     licenseNumber = license,
-                    experienceYears = experienceYears,
+                    
                     isAvailable = true
                 };
 
