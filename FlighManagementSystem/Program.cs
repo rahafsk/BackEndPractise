@@ -358,7 +358,7 @@ namespace FlightManagementSystem.Models
             Console.Clear();
             Console.WriteLine("===== Book Flight =====");
 
-            if (!context.Passengers.Any())
+            if (!context.Passengers.Any()) 
             {
                 Console.WriteLine("No passengers found. Register passenger first.");
                 return;
@@ -595,16 +595,16 @@ namespace FlightManagementSystem.Models
                 Console.WriteLine("     Flight Management System");
                 Console.WriteLine("====================================");
                 Console.WriteLine("1. Register Passenger");
-                Console.WriteLine("2. Add Pilot");
-                Console.WriteLine("3. Add Aircraft");
-                Console.WriteLine("4. Create Flight");
-                Console.WriteLine("5. View Passengers");
-                Console.WriteLine("6. View Pilots");
-                Console.WriteLine("7. View Aircrafts");
-                Console.WriteLine("8. View Flights");
-                Console.WriteLine("9. Book Flight");
-                Console.WriteLine("10. Cancel Booking");
-                Console.WriteLine("11. Cancel Flight");
+                Console.WriteLine("2. Add Aircraft ");
+                Console.WriteLine("3. Register Pilot");
+                Console.WriteLine("4. View all Flights");
+                Console.WriteLine("5. Schedule Flight");
+                Console.WriteLine("6. Book Flight");
+                Console.WriteLine("7. Cancel Booking");
+                Console.WriteLine("8. Depart Flight");
+                Console.WriteLine("9. Cancel Flight");
+                Console.WriteLine("10. Passenger Booking History");
+                Console.WriteLine("11. Flight Revenue & Load Factor Report");
                 Console.WriteLine("12. Flight Revenue Report");
                 Console.WriteLine("0. Exit");
                 Console.Write("Enter your choice: ");
@@ -618,7 +618,7 @@ namespace FlightManagementSystem.Models
                         break;
 
                     case "2":
-                        AddPilot();
+                        AddAircraft();
                         break;
 
                     case "3":
