@@ -490,6 +490,81 @@ namespace FlightManagementSystem.Models
             Console.WriteLine("Total Price: " + booking.TotalPrice);
         }
 
+        // ==========================================================
+        // 7. Cancel Booking
+        // ==========================================================
+        public static void CancelBooking()
+        {
+            Console.Clear();
+            Console.WriteLine("===== Cancel Booking =====");
+
+            var confirmedBookings = context.Bookings
+                .Where(b => b.status == "Confirmed")
+                .ToList();
+
+            if (!confirmedBookings.Any())
+            {
+                Console.WriteLine("No confirmed bookings found.");
+                return;
+            }
+
+            Console.WriteLine("\nConfirmed Bookings:");
+            foreach (Booking booking in confirmedBookings)
+            {
+                Flight flight = context.Flights.FirstOrDefault(f => f.flightId == booking.flightId);
+                Passenger passenger = context.Passengers.FirstOrDefault(p => p.passengerId == booking.passengerId);
+
+                Console.WriteLine("Booking ID: " + booking.bookingId +
+                                  " | Passenger: " + passenger?.passengerName +
+                                  " | Flight: " + flight?.flightCode +
+                                  " | Seat: " + booking.seatNumber);
+            }
+
+            Console.Write("Enter booking ID to cancel: ");
+            int bookingId;
+
+            if (!int.TryParse(Console.ReadLine(), out bookingId))
+            {
+                Console.WriteLine("Invalid booking ID.");
+                return;
+            }
+
+            Booking selectedBooking = context.Bookings
+                .FirstOrDefault(b => b.bookingId == bookingId && b.status == "Confirmed");
+
+            if (selectedBooking == null)
+            {
+                Console.WriteLine("Booking not found.");
+                return;
+            }
+
+            Flight selectedFlight = context.Flights
+                .FirstOrDefault(f => f.flightId == selectedBooking.flightId);
+
+            if (selectedFlight == null)
+            {
+                Console.WriteLine("Flight not found.");
+                return;
+            }
+
+            if (selectedFlight.status == "Departed")
+            {
+                Console.WriteLine("Cannot cancel booking because flight already departed.");
+                return;
+            }
+
+            if (selectedFlight.status == "Cancelled")
+            {
+                Console.WriteLine("Cannot cancel booking because flight is cancelled.");
+                return;
+            }
+
+            selectedBooking.status = "Cancelled";
+            selectedFlight.availableSeats++;
+
+            Console.WriteLine("Booking cancelled successfully.");
+            Console.WriteLine("Seat returned to flight.");
+        }
 
 
         // ==========================================================
