@@ -686,11 +686,46 @@ namespace FlightManagementSystem.Models
             Console.WriteLine("Flight departed successfully.");
             Console.WriteLine("Pilot flight hours updated.");
         }
+        // ==========================================================
+        // 9. Cancel Flight
+        // ==========================================================
+        public static void CancelFlight()
+        {
+            Console.Clear();
+            Console.WriteLine("===== Cancel Flight =====");
 
-        // ==========================================================
-        // Main Menu
-        // ==========================================================
-        static void Main(string[] args)
+            var scheduledFlights = context.Flights
+                .Where(f => f.status == "Scheduled")
+                .ToList();
+
+            if (!scheduledFlights.Any())
+            {
+                Console.WriteLine("No scheduled flights found.");
+                return;
+            }
+
+            Console.WriteLine("\nScheduled Flights:");
+            foreach (Flight flight in scheduledFlights)
+            {
+                Console.WriteLine("ID: " + flight.flightId +
+                                  " | Code: " + flight.flightCode +
+                                  " | From: " + flight.origin +
+                                  " | To: " + flight.destination);
+            }
+
+            Console.Write("Enter flight ID to cancel: ");
+            int flightId;
+
+            if (!int.TryParse(Console.ReadLine(), out flightId))
+            {
+                Console.WriteLine("Invalid flight ID.");
+                return;
+            }
+
+            // ==========================================================
+            // Main Menu
+            // ==========================================================
+            static void Main(string[] args)
         {
             bool running = true;
 
