@@ -721,11 +721,46 @@ namespace FlightManagementSystem.Models
                 Console.WriteLine("Invalid flight ID.");
                 return;
             }
+            Flight selectedFlight = scheduledFlights
+                .FirstOrDefault(f => f.flightId == flightId);
 
-            // ==========================================================
-            // Main Menu
-            // ==========================================================
-            static void Main(string[] args)
+            if (selectedFlight == null)
+            {
+                Console.WriteLine("Flight not found.");
+                return;
+            }
+
+            selectedFlight.status = "Cancelled";
+
+            var affectedBookings = context.Bookings
+                .Where(b => b.flightId == selectedFlight.flightId && b.status == "Confirmed")
+                .ToList();
+
+            foreach (Booking booking in affectedBookings)
+            {
+                booking.status = "Cancelled";
+            }
+
+            selectedFlight.availableSeats = selectedFlight.totalSeats;
+
+            Pilot pilot = context.Pilots
+                .FirstOrDefault(p => p.pilotId == selectedFlight.pilotId);
+
+            if (pilot != null)
+            {
+                pilot.isAvailable = true;
+            }
+
+            Console.WriteLine("Flight cancelled successfully.");
+            Console.WriteLine("Affected bookings: " + affectedBookings.Count);
+            Console.WriteLine("Pilot is available again.");
+        }
+
+
+        // ==========================================================
+        // Main Menu
+        // ==========================================================
+        static void Main(string[] args)
         {
             bool running = true;
 
