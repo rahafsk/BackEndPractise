@@ -405,7 +405,7 @@ namespace FlightManagementSystem.Models
 
             // Find available flights to that destination
             var availableFlights = context.Flights
-                .Where(f => f.status == "Scheduled"
+                .Where(f => f.status == "Scheduled" // .Where(...) filters the list.
                          && f.destination.ToLower() == destination.ToLower()
                          && f.availableSeats > 0)
                 .ToList();
@@ -511,10 +511,12 @@ namespace FlightManagementSystem.Models
             Console.Clear();
             Console.WriteLine("===== Cancel Booking =====");
 
-            var confirmedBookings = context.Bookings
-                .Where(b => b.status == "Confirmed")
+            var confirmedBookings = context.Bookings // So confirmedBookings contains only bookings that can be cancelled.
+                                                     // .Where(...) filters the list.
+                .Where(b => b.status == "Confirmed") // This line gets all bookings that have status "Confirmed".
                 .ToList();
 
+            // Check if there are no confirmed bookings
             if (!confirmedBookings.Any())
             {
                 Console.WriteLine("No confirmed bookings found.");
@@ -522,56 +524,74 @@ namespace FlightManagementSystem.Models
             }
 
             Console.WriteLine("\nConfirmed Bookings:");
-            foreach (Booking booking in confirmedBookings)
+            foreach (Booking booking in confirmedBookings) //This loop goes through every booking inside the confirmedBookings list.
             {
-                Flight flight = context.Flights.FirstOrDefault(f => f.flightId == booking.flightId);
+                // This loop goes through every booking inside the confirmedBookings list.
+                Flight flight = context.Flights.FirstOrDefault(f => f.flightId == booking.flightId); // Find the flight whose ID is the same as the booking flightId.
                 Passenger passenger = context.Passengers.FirstOrDefault(p => p.passengerId == booking.passengerId);
+                /*
+                 * This line searches inside context.Passengers to find the passenger connected to this booking.
+                 * The condition: p.passengerId == booking.passengerId
+                 * Find the passenger whose ID is the same as the booking passengerId.
+                 */
 
+
+                // Print booking details
                 Console.WriteLine("Booking ID: " + booking.bookingId +
-                                  " | Passenger: " + passenger?.passengerName +
-                                  " | Flight: " + flight?.flightCode +
+                                  " | Passenger: " + passenger?.passengerName + // If passenger is not null, get passengerName. If passenger is null, do not crash.
+                                  " | Flight: " + flight?.flightCode + //If flight exists, show flightCode
                                   " | Seat: " + booking.seatNumber);
+                // This is called the null conditional operator.
             }
 
+            // Ask for booking ID to cancel
             Console.Write("Enter booking ID to cancel: ");
             int bookingId;
 
+            // Validate booking ID
             if (!int.TryParse(Console.ReadLine(), out bookingId))
             {
                 Console.WriteLine("Invalid booking ID.");
                 return;
             }
 
+            // Find the booking to cancel
             Booking selectedBooking = context.Bookings
                 .FirstOrDefault(b => b.bookingId == bookingId && b.status == "Confirmed");
 
+            // Check if booking exists
             if (selectedBooking == null)
             {
                 Console.WriteLine("Booking not found.");
                 return;
             }
 
+            // Find the flight associated with the booking
             Flight selectedFlight = context.Flights
                 .FirstOrDefault(f => f.flightId == selectedBooking.flightId);
 
+            // Cancel the booking
             if (selectedFlight == null)
             {
                 Console.WriteLine("Flight not found.");
                 return;
             }
 
+            // Update the booking status to "Cancelled"
             if (selectedFlight.status == "Departed")
             {
                 Console.WriteLine("Cannot cancel booking because flight already departed.");
                 return;
             }
 
+            // Update the booking status to "Cancelled"
             if (selectedFlight.status == "Cancelled")
             {
                 Console.WriteLine("Cannot cancel booking because flight is cancelled.");
                 return;
             }
 
+            
             selectedBooking.status = "Cancelled";
             selectedFlight.availableSeats++;
 
