@@ -58,39 +58,52 @@ namespace FlightManagementSystem.Models
             Console.WriteLine("Passenger registered successfully.");
         }
         // ==========================================================
-        // 2. Add Pilot
+        // 2. Add Aircraft
         // ==========================================================
-        static void AddPilot()
+        static void AddAircraft()
         {
-                Console.Clear();
-                Console.WriteLine("===== Add Pilot =====");
+            Console.Clear();
+            Console.WriteLine("===== Add Aircraft =====");
 
-                int pilotId = context.Pilots.Count + 1; // This creates a new ID for the pilot. - context.Pilots.Count means how many pilots are already saved in the list.
+            // Generate aircraft ID automatically
+            int aircraftId = context.Aircrafts.Count + 1;
 
-                Console.Write("Enter pilot name: ");
-                string name = Console.ReadLine();
+            Console.Write("Enter aircraft model: ");
+            string model = Console.ReadLine();
 
-                Console.Write("Enter license number: ");
-                string license = Console.ReadLine();
+            Console.Write("Enter total seats: ");
+            int totalSeats;
 
-                Console.Write("Enter phone number: ");
-                string phone = Console.ReadLine();
+            // Check if total seats is a valid number
+            if (!int.TryParse(Console.ReadLine(), out totalSeats))
+            {
+                Console.WriteLine("Invalid total seats.");
+                return;
+            }
 
-                
-                Pilot pilot = new Pilot  // This creates a new object from the Pilot class.
-                {
-                    pilotId = pilotId,
-                    pilotName = name,
-                    pilotPhone= phone,
-                    licenseNumber = license,
-                    
-                    isAvailable = true
-                };
+            // Total seats must be more than 0
+            if (totalSeats <= 0)
+            {
+                Console.WriteLine("Total seats must be greater than 0.");
+                return;
+            }
 
-                context.Pilots.Add(pilot); // This adds the new pilot object into the Pilots list.
+            // Create new Aircraft object
+            Aircraft aircraft = new Aircraft
+            {
+                aircraftId = aircraftId,
+                Model = model,
+                totalSeats = totalSeats,
 
-                Console.WriteLine("Pilot added successfully.");
+                // The aircraft starts as operational
+                isOperational = true
+            };
 
+            // Add aircraft to the Aircrafts list
+            context.Aircrafts.Add(aircraft);
+
+            Console.WriteLine("Aircraft added successfully.");
+            Console.WriteLine("Aircraft ID: " + aircraft.aircraftId);
         }
 
         // ==========================================================
@@ -191,7 +204,7 @@ namespace FlightManagementSystem.Models
         }
 
         // ==========================================================
-        // 5. View Passengers
+        // 5. Schedule Flight
         // ==========================================================
 
         public static void ScheduleFlight()
@@ -621,11 +634,11 @@ namespace FlightManagementSystem.Models
                         break;
 
                     case "6":
-                        //ViewPilots();
+                        BookFlight();
                         break;
 
                     case "7":
-                        //ViewAircrafts();
+                        CancelBooking();
                         break;
 
                     case "8":
