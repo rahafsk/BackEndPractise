@@ -601,6 +601,81 @@ namespace FlightManagementSystem.Models
 
 
         // ==========================================================
+        // 8. Depart Flight
+        // ==========================================================
+        public static void DepartFlight()
+        {
+            Console.Clear();
+            Console.WriteLine("===== Depart Flight =====");
+
+            var scheduledFlights = context.Flights
+                .Where(f => f.status == "Scheduled")
+                .ToList();
+
+            if (!scheduledFlights.Any())
+            {
+                Console.WriteLine("No scheduled flights found.");
+                return;
+            }
+
+            Console.WriteLine("\nScheduled Flights:");
+            foreach (Flight flight in scheduledFlights)
+            {
+                Console.WriteLine("ID: " + flight.flightId +
+                                  " | Code: " + flight.flightCode +
+                                  " | From: " + flight.origin +
+                                  " | To: " + flight.destination);
+            }
+
+            Console.Write("Enter flight ID to depart: ");
+            int flightId;
+
+            if (!int.TryParse(Console.ReadLine(), out flightId))
+            {
+                Console.WriteLine("Invalid flight ID.");
+                return;
+            }
+
+            Flight selectedFlight = scheduledFlights
+                .FirstOrDefault(f => f.flightId == flightId);
+
+            if (selectedFlight == null)
+            {
+                Console.WriteLine("Flight not found.");
+                return;
+            }
+
+            Console.Write("Enter flight duration in hours: ");
+            int duration;
+
+            if (!int.TryParse(Console.ReadLine(), out duration))
+            {
+                Console.WriteLine("Invalid duration.");
+                return;
+            }
+
+            if (duration <= 0)
+            {
+                Console.WriteLine("Duration must be greater than 0.");
+                return;
+            }
+
+            selectedFlight.status = "Departed";
+
+            Pilot pilot = context.Pilots
+                .FirstOrDefault(p => p.pilotId == selectedFlight.pilotId);
+
+            if (pilot != null)
+            {
+                pilot.FlightHours += duration;
+                pilot.isAvailable = true;
+            }
+
+            Console.WriteLine("Flight departed successfully.");
+            Console.WriteLine("Pilot flight hours updated.");
+        }
+
+        // ==========================================================
         // Main Menu
         // ==========================================================
         static void Main(string[] args)
