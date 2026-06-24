@@ -608,16 +608,19 @@ namespace FlightManagementSystem.Models
             Console.Clear();
             Console.WriteLine("===== Depart Flight =====");
 
+            // Check if no scheduled flights exist
             var scheduledFlights = context.Flights
                 .Where(f => f.status == "Scheduled")
                 .ToList();
 
+            // Display scheduled flights
             if (!scheduledFlights.Any())
             {
                 Console.WriteLine("No scheduled flights found.");
                 return;
             }
 
+            // Display scheduled flights
             Console.WriteLine("\nScheduled Flights:");
             foreach (Flight flight in scheduledFlights)
             {
@@ -627,24 +630,30 @@ namespace FlightManagementSystem.Models
                                   " | To: " + flight.destination);
             }
 
+            // Ask for flight ID to depart
             Console.Write("Enter flight ID to depart: ");
             int flightId;
 
+            // Validate flight ID
             if (!int.TryParse(Console.ReadLine(), out flightId))
             {
                 Console.WriteLine("Invalid flight ID.");
                 return;
             }
 
+            // Find the flight to depart
             Flight selectedFlight = scheduledFlights
                 .FirstOrDefault(f => f.flightId == flightId);
 
+            // Check if flight exists
             if (selectedFlight == null)
             {
                 Console.WriteLine("Flight not found.");
                 return;
             }
 
+            // Update flight status to "Departed"
+            // This asks the user how many hours the flight took
             Console.Write("Enter flight duration in hours: ");
             int duration;
 
@@ -654,20 +663,23 @@ namespace FlightManagementSystem.Models
                 return;
             }
 
-            if (duration <= 0)
+            // Update flight status to "Departed"
+            if (duration <= 0) // This asks the user how many hours the flight took
             {
                 Console.WriteLine("Duration must be greater than 0.");
                 return;
             }
 
+            
             selectedFlight.status = "Departed";
 
+            // This line searches inside the Pilots list to find the pilot assigned to this flight.
             Pilot pilot = context.Pilots
                 .FirstOrDefault(p => p.pilotId == selectedFlight.pilotId);
 
             if (pilot != null)
             {
-                pilot.FlightHours += duration;
+                pilot.FlightHours += duration; //This adds the flight duration to the pilot’s total flight hours.
                 pilot.isAvailable = true;
             }
 
