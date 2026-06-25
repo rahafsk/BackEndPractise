@@ -309,8 +309,10 @@ namespace FlightManagementSystem.Models
 
             Console.Write("Enter departure time: ");
             string time = Console.ReadLine();
+            
+            Console.Write("Enter flight duration: ");
+            int flightDuration = int.Parse(Console.ReadLine());
 
-           
 
             Console.Write("Enter ticket price: ");
             decimal price; // decimal is used for money.
@@ -340,6 +342,7 @@ namespace FlightManagementSystem.Models
                 destination = destination,
                 departureDate = date,
                 departureTime = time,
+                flightduration = flightDuration ,
                 ticketPrice = price,
                 totalSeats = selectedAircraft.totalSeats,
                 availableSeats = selectedAircraft.totalSeats,
