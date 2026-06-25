@@ -722,9 +722,9 @@ namespace FlightManagementSystem.Models
                 return;
             }
             Flight selectedFlight = scheduledFlights
-                .FirstOrDefault(f => f.flightId == flightId);
+                .FirstOrDefault(f => f.flightId == flightId); // Find the flight whose flightId is the same as the ID entered by the user.
 
-            if (selectedFlight == null)
+            if (selectedFlight == null) // If selectedFlight is null, it means the flight was not found.
             {
                 Console.WriteLine("Flight not found.");
                 return;
@@ -741,7 +741,11 @@ namespace FlightManagementSystem.Models
                 booking.status = "Cancelled";
             }
 
-            selectedFlight.availableSeats = selectedFlight.totalSeats;
+            selectedFlight.availableSeats = selectedFlight.totalSeats; // This resets the available seats back to the full number of seats.
+            /*
+             * Because the flight is cancelled, so all seats are logically free again.
+             * The confirmed bookings were cancelled, so no seats are occupied anymore.
+             */
 
             Pilot pilot = context.Pilots
                 .FirstOrDefault(p => p.pilotId == selectedFlight.pilotId);
