@@ -774,12 +774,14 @@ namespace FlightManagementSystem.Models
             Console.Clear();
             Console.WriteLine("===== Passenger Booking History =====");
 
+            // Check if there are passengers
             if (!context.Passengers.Any())
             {
                 Console.WriteLine("No passengers found.");
                 return;
             }
 
+            // Display all passengers
             Console.WriteLine("\nPassengers:");
             foreach (Passenger passenger in context.Passengers)
             {
@@ -787,37 +789,42 @@ namespace FlightManagementSystem.Models
                                   " | Name: " + passenger.passengerName);
             }
 
+            // Ask the user to enter passenger ID
             Console.Write("Enter passenger ID: ");
             int passengerId;
 
+            // Validate passenger ID
             if (!int.TryParse(Console.ReadLine(), out passengerId))
             {
                 Console.WriteLine("Invalid passenger ID.");
                 return;
             }
 
+            // Find the selected passenger
             Passenger selectedPassenger = context.Passengers
                 .FirstOrDefault(p => p.passengerId == passengerId);
-
+            // Check if passenger exists
             if (selectedPassenger == null)
             {
                 Console.WriteLine("Passenger not found.");
                 return;
             }
 
+            // Get all bookings for this passenger
             var passengerBookings = context.Bookings
                 .Where(b => b.passengerId == passengerId)
                 .ToList();
 
+            // Check if there are any bookings
             if (!passengerBookings.Any())
             {
                 Console.WriteLine("This passenger has no booking history.");
                 return;
             }
-
+            
             decimal totalSpent = 0;
-
-            Console.WriteLine("\nBooking History for: " + selectedPassenger.passengerName);
+            
+            Console.WriteLine("\nBooking History for: " + selectedPassenger.passengerName); // This line displays the name of the selected passenger.
 
             foreach (Booking booking in passengerBookings)
             {
@@ -825,11 +832,11 @@ namespace FlightManagementSystem.Models
                     .FirstOrDefault(f => f.flightId == booking.flightId);
 
                 Console.WriteLine("----------------------------------");
-                Console.WriteLine("Flight Code: " + flight?.flightCode);
+                Console.WriteLine("Flight Code: " + flight?.flightCode); 
                 Console.WriteLine("Origin: " + flight?.origin);
                 Console.WriteLine("Destination: " + flight?.destination);
                 Console.WriteLine("Departure Date: " + flight?.departureDate);
-                Console.WriteLine("Seat Number: " + booking.seatNumber);
+                Console.WriteLine("Seat Number: " + booking.seatNumber);    
                 Console.WriteLine("Price Paid: " + booking.TotalPrice);
                 Console.WriteLine("Booking Status: " + booking.status);
 
@@ -914,7 +921,7 @@ namespace FlightManagementSystem.Models
                         break;
 
                     case "10":
-                        //PassengerBookingHistory();
+                        PassengerBookingHistory();
                         break;
 
                     case "11":
