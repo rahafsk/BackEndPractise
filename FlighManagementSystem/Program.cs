@@ -3,8 +3,9 @@ using FlighManagementSystem.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 using System.Linq;
+using System.Text;
+using System.Threading.Channels;
 
 namespace FlightManagementSystem.Models
 
@@ -66,7 +67,7 @@ namespace FlightManagementSystem.Models
             Console.WriteLine("===== Add Aircraft =====");
 
             // Generate aircraft ID automatically
-            int aircraftId = context.Aircrafts.Count + 1;
+            int aircraftId = context.Aircrafts.Count + 1; // context.Pilots.Count means how many pilots are already saved in the list.
 
             Console.Write("Enter aircraft model: ");
             string model = Console.ReadLine();
@@ -220,6 +221,7 @@ namespace FlightManagementSystem.Models
              * context.Aircrafts is the list of all aircrafts.
              * .Where(a => a.isOperational == true) means: Take only aircrafts where isOperational is true.
              * .ToList() converts the result into a list.
+             * var - displays the type of the variable automatically. In this case, it will be List<Aircraft>.
              */
 
             if (!operationalAircrafts.Any())
@@ -307,6 +309,8 @@ namespace FlightManagementSystem.Models
 
             Console.Write("Enter departure time: ");
             string time = Console.ReadLine();
+
+           
 
             Console.Write("Enter ticket price: ");
             decimal price; // decimal is used for money.
@@ -823,23 +827,24 @@ namespace FlightManagementSystem.Models
                         break;
 
                     case "8":
-                        //ViewFlights();
+                        DepartFlight();
                         break;
 
                     case "9":
-                        //BookFlight();
+                        CancelFlight();
                         break;
 
                     case "10":
-                        //CancelBooking();
+                        //PassengerBookingHistory();
                         break;
 
                     case "11":
-                        //CancelFlight();
+                        //FlightRevenueLoadFactorReport();
                         break;
 
                     case "12":
-                        //FlightRevenueReport();
+                        //Flight01
+                        //RevenueReport();
                         break;
 
                     case "0":

@@ -18,5 +18,6 @@ namespace FlighManagementSystem.models
         public int availableSeats { get; set; }
         public string status { get; set; }
         public string flightCode { get; set; }
+        public int flightduration { get; set; }
     }
 }
