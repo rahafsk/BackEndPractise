@@ -942,7 +942,6 @@ namespace FlightManagementSystem.Models
                 Console.WriteLine("9. Cancel Flight");
                 Console.WriteLine("10. Passenger Booking History");
                 Console.WriteLine("11. Flight Revenue & Load Factor Report");
-                Console.WriteLine("12. Flight Revenue Report");
                 Console.WriteLine("0. Exit");
                 Console.Write("Enter your choice: ");
 
