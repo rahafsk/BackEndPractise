@@ -864,16 +864,22 @@ namespace FlightManagementSystem.Models
                 return;
             }
 
+            // // Create a report from all flights in the system
             var report = context.Flights
-                .Select(f =>
+                .Select(f => // Go through each flight and create something new from it.
                 {
+                    // Count how many confirmed bookings belong to this flight
                     int confirmedBookings = context.Bookings
                         .Count(b => b.flightId == f.flightId && b.status == "Confirmed");
 
+                    // Calculate revenue for this flight
+                    // Revenue means total money from confirmed bookings only
                     decimal revenue = context.Bookings
                         .Where(b => b.flightId == f.flightId && b.status == "Confirmed")
                         .Sum(b => b.TotalPrice);
 
+                    // Calculate how full the flight is
+                    // If totalSeats is 0, loadFactor becomes 0 to avoid division by zero
                     double loadFactor = f.totalSeats == 0
                         ? 0
                         : confirmedBookings * 100.0 / f.totalSeats;
@@ -888,7 +894,8 @@ namespace FlightManagementSystem.Models
                         LoadFactor = loadFactor
                     };
                 })
-                .OrderByDescending(r => r.Revenue)
+
+                .OrderByDescending(r => r.Revenue) // // Sort the report by revenue from highest to lowest
                 .ToList();
 
             decimal grandTotal = 0;
