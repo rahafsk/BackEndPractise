@@ -767,7 +767,7 @@ namespace FlightManagementSystem.Models
             Console.WriteLine("Pilot is available again.");
         }
         // ==========================================================
-        // PassengerBookingHistory
+        // 10. Passenger Booking History
         // ==========================================================
         public static void PassengerBookingHistory()
         {
@@ -850,6 +850,65 @@ namespace FlightManagementSystem.Models
             Console.WriteLine("Total Spent on Confirmed Bookings: " + totalSpent);
         }
 
+        // ==========================================================
+        // 11. Flight Revenue & Load Factor Report
+        // ==========================================================
+        public static void FlightRevenueLoadFactorReport()
+        {
+            Console.Clear();
+            Console.WriteLine("===== Flight Revenue & Load Factor Report =====");
+
+            if (!context.Flights.Any())
+            {
+                Console.WriteLine("No flights found.");
+                return;
+            }
+
+            var report = context.Flights
+                .Select(f =>
+                {
+                    int confirmedBookings = context.Bookings
+                        .Count(b => b.flightId == f.flightId && b.status == "Confirmed");
+
+                    decimal revenue = context.Bookings
+                        .Where(b => b.flightId == f.flightId && b.status == "Confirmed")
+                        .Sum(b => b.TotalPrice);
+
+                    double loadFactor = f.totalSeats == 0
+                        ? 0
+                        : confirmedBookings * 100.0 / f.totalSeats;
+
+                    return new
+                    {
+                        FlightCode = f.flightCode,
+                        Origin = f.origin,
+                        Destination = f.destination,
+                        ConfirmedBookings = confirmedBookings,
+                        Revenue = revenue,
+                        LoadFactor = loadFactor
+                    };
+                })
+                .OrderByDescending(r => r.Revenue)
+                .ToList();
+
+            decimal grandTotal = 0;
+
+            foreach (var item in report)
+            {
+                Console.WriteLine("----------------------------------");
+                Console.WriteLine("Flight Code: " + item.FlightCode);
+                Console.WriteLine("Route: " + item.Origin + " -> " + item.Destination);
+                Console.WriteLine("Total Confirmed Bookings: " + item.ConfirmedBookings);
+                Console.WriteLine("Total Revenue: " + item.Revenue);
+                Console.WriteLine("Load Factor: " + item.LoadFactor.ToString("F2") + "%");
+
+                grandTotal += item.Revenue;
+            }
+
+            Console.WriteLine("----------------------------------");
+            Console.WriteLine("Grand Total Revenue Across All Flights: " + grandTotal);
+        }
+
 
         // ==========================================================
         // Main Menu
@@ -925,12 +984,7 @@ namespace FlightManagementSystem.Models
                         break;
 
                     case "11":
-                        //FlightRevenueLoadFactorReport();
-                        break;
-
-                    case "12":
-                        //Flight01
-                        //RevenueReport();
+                        FlightRevenueLoadFactorReport();
                         break;
 
                     case "0":
