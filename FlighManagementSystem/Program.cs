@@ -606,7 +606,6 @@ namespace FlightManagementSystem.Models
             Console.WriteLine("Seat returned to flight.");
         }
 
-
         // ==========================================================
         // 8. Depart Flight
         // ==========================================================
@@ -915,7 +914,6 @@ namespace FlightManagementSystem.Models
             Console.WriteLine("----------------------------------");
             Console.WriteLine("Grand Total Revenue Across All Flights: " + grandTotal);
         }
-
 
         // ==========================================================
         // Main Menu
