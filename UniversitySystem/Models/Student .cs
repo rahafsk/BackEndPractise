@@ -6,11 +6,11 @@ using System.Text;
 
 namespace UniversitySystem.Models
 {
-    internal class Students
+    internal class Student
     {
         // This index makes Email unique in the database
         [Index(nameof(Email), IsUnique = true)]
-        public class Student
+        public class Students
         {
             // Primary Key
             // DatabaseGenerated means the database will generate the ID automatically
