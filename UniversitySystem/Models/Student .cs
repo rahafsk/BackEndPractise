@@ -51,7 +51,7 @@ namespace UniversitySystem.Models
 
             // Navigation property
             // One student can have many enrollments
-            public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
-        }
+            public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>(); // relationship with Enrollment
+    }
     
 }
