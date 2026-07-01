@@ -1,0 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace FlightManagementSystem.Models
+{
+    public class Pilot
+    {
+        public int pilotId { get; set; }
+        public string pilotName { get; set; }
+        public string licenseNumber { get; set; }
+        public string pilotPhone { get; set; }
+        public bool isAvailable { get; set; }
+        public int FlightHours { get; set; }
+
+    }
+}
+
