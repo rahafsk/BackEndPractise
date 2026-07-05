@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="FlighManagementSystem/FlighManagementSystem.csproj" />
+  <Project Path="UniversitySystem/UniversitySystem.csproj" Id="4235e639-7e54-42aa-bcf4-eaf0f2e4b934" />
 </Solution>
