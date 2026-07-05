@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace FlighManagementSystem.models
+{
+    public class Booking
+    {
+        public int bookingId { get; set; }
+        public int passengerId { get; set; }
+        public int flightId { get; set; }
+        public string bookingDate { get; set; }
+        public decimal TotalPrice { get; set; }
+        public string status { get; set; }
+        public string seatNumber { get; set; }
+    }
+}
