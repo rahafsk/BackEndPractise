@@ -1,10 +1,27 @@
-﻿using System;
+﻿using E_Commerce.Models;
 using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace E_Commerce.Models
+namespace ECommerceSystem.Models
 {
-    internal class Category
+    [Table("Categories")]
+    public class Category
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int categoryId { get; set; } // system generated
+
+        [Required]
+        [MaxLength(100)]
+        public string categoryName { get; set; } = string.Empty; // user input, unique
+
+        [MaxLength(500)]
+        public string? description { get; set; } // user input, optional
+
+        [MaxLength(300)]
+        public string? imageUrl { get; set; } // user input, optional
+
+        public virtual ICollection<Product> Products { get; set; } = new List<Product>();
     }
 }
