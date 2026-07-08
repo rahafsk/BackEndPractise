@@ -27,6 +27,30 @@ class Program
             Console.WriteLine("13. Add Category");
             Console.WriteLine("0. Exit");
             Console.Write("Choose: ");
+
+            string? choice = Console.ReadLine();
+            Console.WriteLine();
+
+            switch (choice)
+            {
+                //case "1": RegisterUser(); break;
+                //case "2": AddProductToCategory(); break;
+                //case "3": PlaceOrder(); break;
+                //case "4": WriteProductReview(); break;
+                //case "5": UpdateProductPriceAndAvailability(); break;
+                //case "6": CancelOrder(); break;
+                //case "7": DeleteReview(); break;
+                //case "8": ViewAllProducts(); break;
+                //case "9": FilterProductsByCategoryAndPriceRange(); break;
+                //case "10": GetCategoryWithAllProducts(); break;
+                //case "11": ViewOrderHistoryWithFullDetails(); break;
+                //case "12": ProductSummaryReport(); break;
+                //case "13": AddCategory(); break;
+                //case "0": return;
+                //default: Console.WriteLine("Invalid choice."); break;
+
+            }
+
         }
     }
 }
