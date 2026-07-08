@@ -31,57 +31,101 @@ class Program
             string? choice = Console.ReadLine();
             Console.WriteLine();
 
-            switch (choice)
+            // --------------------------------------------------
+            // Main Menu
+            // --------------------------------------------------
+            static void Main(string[] args)
             {
-                //case "1": RegisterUser(); break;
-                //case "2": AddProductToCategory(); break;
-                //case "3": PlaceOrder(); break;
-                //case "4": WriteProductReview(); break;
-                //case "5": UpdateProductPriceAndAvailability(); break;
-                //case "6": CancelOrder(); break;
-                //case "7": DeleteReview(); break;
-                //case "8": ViewAllProducts(); break;
-                //case "9": FilterProductsByCategoryAndPriceRange(); break;
-                //case "10": GetCategoryWithAllProducts(); break;
-                //case "11": ViewOrderHistoryWithFullDetails(); break;
-                //case "12": ProductSummaryReport(); break;
-                //case "13": AddCategory(); break;
-                case "0": return;
-                default: Console.WriteLine("Invalid choice."); break;
+                int choice;
 
+                do
+                {
+                    Console.WriteLine("\n----- E-Commerce EF Core System ----");
+                    Console.WriteLine("1. Register New User");
+                    Console.WriteLine("2. Add New Product");
+                    Console.WriteLine("3. Place Order");
+                    Console.WriteLine("4. Write Product Review");
+                    Console.WriteLine("5. Update Product Price and Availability");
+                    Console.WriteLine("6. Cancel Order");
+                    Console.WriteLine("7. Delete Review");
+                    Console.WriteLine("8. View All Products");
+                    Console.WriteLine("9. Filter Products by Category and Price Range");
+                    Console.WriteLine("10. Get Category With Products");
+                    Console.WriteLine("11. View User Order History");
+                    Console.WriteLine("12. Product Summary Report");
+                    Console.WriteLine("0. Exit");
+
+                    Console.Write("Enter choice: ");
+                    int.TryParse(Console.ReadLine(), out choice);
+
+                    switch (choice)
+                    {
+                        case 1:
+                            //RegisterUser();
+                            break;
+
+                        case 2:
+                            //AddProduct();
+                            break;
+
+                        case 3:
+                            //PlaceOrder();
+                            break;
+
+                        case 4:
+                            //WriteReview();
+                            break;
+
+                        case 5:
+                            //UpdateProduct();
+                            break;
+
+                        case 6:
+                            //CancelOrder();
+                            break;
+
+                        case 7:
+                            //DeleteReview();
+                            break;
+
+                        case 8:
+                            //ViewAllProducts();
+                            break;
+
+                        case 9:
+                            //FilterProducts();
+                            break;
+
+                        case 10:
+                            //GetCategoryWithProducts();
+                            break;
+
+                        case 11:
+                            //ViewOrderHistory();
+                            break;
+
+                        case 12:
+                            //ProductSummaryReport();
+                            break;
+
+                        case 0:
+                            Console.WriteLine("Goodbye!");
+                            break;
+
+                        default:
+                            Console.WriteLine("Invalid choice.");
+                            break;
+                    }
+
+                    if (choice != 0)
+                    {
+                        Console.WriteLine("\nPress any key to continue...");
+                        Console.ReadKey();
+                        Console.Clear();
+                    }
+
+                } while (choice != 0);
             }
-
         }
     }
-
-    static int ReadInt(string message)
-    {
-        Console.Write(message);
-        while (!int.TryParse(Console.ReadLine(), out int value))
-        {
-            Console.Write("Invalid number. Try again: ");
-        }
-        return 0;
-    }
-
-    static decimal ReadDecimal(string message)
-    {
-        Console.Write(message);
-        while (!decimal.TryParse(Console.ReadLine(), out decimal value))
-        {
-            Console.Write("Invalid decimal number. Try again: ");
-        }
-        return 0;
-    }
-
-    static bool ReadBool(string message)
-    {
-        Console.Write(message + " (true/false): ");
-        while (!bool.TryParse(Console.ReadLine(), out bool value))
-        {
-            Console.Write("Invalid value. Enter true or false: ");
-        }
-        return 0;
-    }
-
 }
