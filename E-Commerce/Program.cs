@@ -75,8 +75,9 @@ class Program
             return;
         }
 
+        //This displays all available categories.
         Console.WriteLine("Available Categories:");
-        foreach (Category category in categories)
+        foreach (Category category in categories)  // foreach goes through each category in the list one by one.
         {
             Console.WriteLine("ID: " + category.categoryId +
                               " | Name: " + category.categoryName);
@@ -85,9 +86,17 @@ class Program
         Console.Write("Enter category ID: ");
         int categoryId = int.Parse(Console.ReadLine());
 
+        // This searches the Categories table for a category with the same ID entered by the user.
         Category selectedCategory = context.Categories
+            /* 
+             * FirstOrDefault(c => c.categoryId == categoryId)
+             * means:“Find the first category where categoryId equals the entered category ID.”
+             * If it finds a category, it returns that category.
+             * If it does not find one, it returns null.
+             */
             .FirstOrDefault(c => c.categoryId == categoryId);
 
+        // This checks if the selectedCategory is null, which means no category was found with that ID.
         if (selectedCategory == null)
         {
             Console.WriteLine("Category not found.");
