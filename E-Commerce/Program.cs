@@ -328,7 +328,34 @@ class Program
         Console.WriteLine("Review deleted successfully.");
     }
 
-    static void Main()
+        // --------------------------------------------------
+        // Case 8: View All Products
+        // --------------------------------------------------
+        static void ViewAllProducts()
+        {
+            Console.Clear();
+            Console.WriteLine("----- View All Products -----");
+
+            var products = context.Products.ToList();
+
+            if (!products.Any())
+            {
+                Console.WriteLine("No products found.");
+                return;
+            }
+
+            foreach (Product product in products)
+            {
+                Console.WriteLine("Product ID: " + product.productId);
+                Console.WriteLine("Name: " + product.productName);
+                Console.WriteLine("Price: " + product.price);
+                Console.WriteLine("Stock Quantity: " + product.stockQuantity);
+                Console.WriteLine("Available: " + product.isAvailable);
+                Console.WriteLine("--------------------------------");
+            }
+        }
+
+        static void Main()
     {
         while (true)
         {
