@@ -74,4 +74,14 @@ class Program
         return 0;
     }
 
+    static bool ReadBool(string message)
+    {
+        Console.Write(message + " (true/false): ");
+        while (!bool.TryParse(Console.ReadLine(), out bool value))
+        {
+            Console.Write("Invalid value. Enter true or false: ");
+        }
+        return 0;
+    }
+
 }
