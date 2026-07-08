@@ -40,6 +40,71 @@ class Program
         Console.WriteLine("New User ID: " + user.userId);
     }
 
+    // --------------------------------------------------
+    // Case 2: Add New Product to Category
+    // --------------------------------------------------
+    static void AddProduct()
+    {
+        Console.Clear();
+        Console.WriteLine("----- Add New Product -----");
+
+        var categories = context.Categories.ToList();
+
+        if (!categories.Any())
+        {
+            Console.WriteLine("No categories found. Add categories first.");
+            return;
+        }
+
+        Console.WriteLine("Available Categories:");
+        foreach (Category category in categories)
+        {
+            Console.WriteLine("ID: " + category.categoryId +
+                              " | Name: " + category.categoryName);
+        }
+
+        Console.Write("Enter category ID: ");
+        int categoryId = int.Parse(Console.ReadLine());
+
+        Category selectedCategory = context.Categories
+            .FirstOrDefault(c => c.categoryId == categoryId);
+
+        if (selectedCategory == null)
+        {
+            Console.WriteLine("Category not found.");
+            return;
+        }
+
+        Console.Write("Enter product name: ");
+        string productName = Console.ReadLine();
+
+        Console.Write("Enter description: ");
+        string description = Console.ReadLine();
+
+        Console.Write("Enter price: ");
+        decimal price = decimal.Parse(Console.ReadLine());
+
+        Console.Write("Enter stock quantity: ");
+        int stockQuantity = int.Parse(Console.ReadLine());
+
+        Product product = new Product
+        {
+            productName = productName,
+            description = description,
+            price = price,
+            stockQuantity = stockQuantity,
+            categoryId = categoryId,
+            createdAt = DateTime.Now,
+            isAvailable = true
+        };
+
+        context.Products.Add(product);
+        context.SaveChanges();
+
+        Console.WriteLine("Product added successfully.");
+        Console.WriteLine("New Product ID: " + product.productId);
+    }
+
 
 
     static void Main()
@@ -96,11 +161,11 @@ class Program
                     switch (choice)
                     {
                         case 1:
-                            //RegisterUser();
+                            RegisterUser();
                             break;
 
                         case 2:
-                            //AddProduct();
+                            AddProduct();
                             break;
 
                         case 3:
