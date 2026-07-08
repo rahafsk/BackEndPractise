@@ -133,6 +133,101 @@ class Program
         Console.WriteLine("New Product ID: " + product.productId);
     }
 
+    // --------------------------------------------------
+    // Case 4: Write Product Review
+    // --------------------------------------------------
+    static void WriteReview()
+    {
+        Console.Clear();
+        Console.WriteLine("----- Write Product Review -----");
+
+        var users = context.Users.ToList();
+
+        if (!users.Any())
+        {
+            Console.WriteLine("No users found.");
+            return;
+        }
+
+        Console.WriteLine("Available Users:");
+        foreach (User user in users)
+        {
+            Console.WriteLine("ID: " + user.userId +
+                              " | Username: " + user.username);
+        }
+
+        Console.Write("Enter user ID: ");
+        int userId = int.Parse(Console.ReadLine());
+
+        User selectedUser = context.Users
+            .FirstOrDefault(u => u.userId == userId);
+
+        if (selectedUser == null)
+        {
+            Console.WriteLine("User not found.");
+            return;
+        }
+
+        var products = context.Products.ToList();
+
+        if (!products.Any())
+        {
+            Console.WriteLine("No products found.");
+            return;
+        }
+
+        Console.WriteLine("\nAvailable Products:");
+        foreach (Product product in products)
+        {
+            Console.WriteLine("ID: " + product.productId +
+                              " | Name: " + product.productName);
+        }
+
+        Console.Write("Enter product ID: ");
+        int productId = int.Parse(Console.ReadLine());
+
+        Product selectedProduct = context.Products
+            .FirstOrDefault(p => p.productId == productId);
+
+        if (selectedProduct == null)
+        {
+            Console.WriteLine("Product not found.");
+            return;
+        }
+        // Why is this important? Because userId is a foreign key in the Review table. A review cannot be linked to a user that does not exist.
+
+        Console.Write("Enter rating from 1 to 5: ");
+        int rating = int.Parse(Console.ReadLine());
+
+        if (rating < 1 || rating > 5)
+        {
+            Console.WriteLine("Rating must be between 1 and 5.");
+            return;
+        }
+        /*
+         * This validates the rating.
+         * The condition means: If rating is less than 1 OR greater than 5, it is invalid.
+         */
+
+        Console.Write("Enter comment: ");
+        string comment = Console.ReadLine();
+
+        Review review = new Review
+        {
+            userId = userId,
+            productId = productId,
+            rating = rating,
+            comment = comment,
+            reviewDate = DateTime.Now
+        };
+
+        context.Reviews.Add(review);
+        context.SaveChanges();
+
+        Console.WriteLine("Review added successfully.");
+        Console.WriteLine("Review ID: " + review.reviewId);
+    }
+
 
 
     static void Main()
