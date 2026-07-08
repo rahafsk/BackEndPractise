@@ -7,6 +7,41 @@ class Program
 {
     static ECommerceContext context = new ECommerceContext();
 
+    // --------------------------------------------------
+    // Case 1: Register New User
+    // --------------------------------------------------
+    static void RegisterUser()
+    {
+        Console.Clear();
+        Console.WriteLine("----- Register New User -----");
+
+        Console.Write("Enter username: ");
+        string username = Console.ReadLine();
+
+        Console.Write("Enter email: ");
+        string email = Console.ReadLine();
+
+        Console.Write("Enter password: ");
+        string password = Console.ReadLine();
+
+        User user = new User
+        {
+            username = username,
+            email = email,
+            passwordHash = password,
+            registrationDate = DateTime.Now,
+            isActive = true
+        };
+
+        context.Users.Add(user);
+        context.SaveChanges();
+
+        Console.WriteLine("User registered successfully.");
+        Console.WriteLine("New User ID: " + user.userId);
+    }
+
+
+
     static void Main()
     {
         while (true)
