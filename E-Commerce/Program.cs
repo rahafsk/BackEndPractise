@@ -46,8 +46,8 @@ class Program
                 //case "11": ViewOrderHistoryWithFullDetails(); break;
                 //case "12": ProductSummaryReport(); break;
                 //case "13": AddCategory(); break;
-                //case "0": return;
-                //default: Console.WriteLine("Invalid choice."); break;
+                case "0": return;
+                default: Console.WriteLine("Invalid choice."); break;
 
             }
 
@@ -63,6 +63,15 @@ class Program
         }
         return 0;
     }
-    
+
+    static decimal ReadDecimal(string message)
+    {
+        Console.Write(message);
+        while (!decimal.TryParse(Console.ReadLine(), out decimal value))
+        {
+            Console.Write("Invalid decimal number. Try again: ");
+        }
+        return 0;
+    }
 
 }
