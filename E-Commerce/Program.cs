@@ -134,6 +134,131 @@ class Program
     }
 
     // --------------------------------------------------
+    // Case 3: Place Order
+    // --------------------------------------------------
+    static void PlaceOrder()
+    {
+        Console.Clear();
+        Console.WriteLine("----- Place Order -----");
+
+        var users = context.Users.ToList();
+
+        if (!users.Any())
+        {
+            Console.WriteLine("No users found.");
+            return;
+        }
+
+        Console.WriteLine("Available Users:");
+        foreach (User user in users)
+        {
+            Console.WriteLine("ID: " + user.userId +
+                              " | Username: " + user.username);
+        }
+
+        Console.Write("Enter user ID: ");
+        int userId = int.Parse(Console.ReadLine());
+
+        User selectedUser = context.Users
+            .FirstOrDefault(u => u.userId == userId);
+
+        if (selectedUser == null)
+        {
+            Console.WriteLine("User not found.");
+            return;
+        }
+
+        Order order = new Order
+        {
+            userId = userId,
+            orderDate = DateTime.Now,
+            status = "Pending",
+            totalAmount = 0
+        };
+
+        // Save order first to get orderId from database
+        context.Orders.Add(order);
+        context.SaveChanges();
+
+        decimal totalAmount = 0;
+        string addMore = "yes";
+
+        while (addMore == "yes")
+        {
+            var products = context.Products
+                .Where(p => p.isAvailable == true && p.stockQuantity > 0)
+                .ToList();
+
+            if (!products.Any())
+            {
+                Console.WriteLine("No available products.");
+                break;
+            }
+
+            Console.WriteLine("\nAvailable Products:");
+            foreach (Product product in products)
+            {
+                Console.WriteLine("ID: " + product.productId +
+                                  " | Name: " + product.productName +
+                                  " | Price: " + product.price +
+                                  " | Stock: " + product.stockQuantity);
+            }
+
+            Console.Write("Enter product ID: ");
+            int productId = int.Parse(Console.ReadLine());
+
+            Product selectedProduct = context.Products
+                .FirstOrDefault(p => p.productId == productId);
+
+            if (selectedProduct == null)
+            {
+                Console.WriteLine("Product not found.");
+                continue;
+            }
+
+            Console.Write("Enter quantity: ");
+            int quantity = int.Parse(Console.ReadLine());
+
+            if (quantity <= 0)
+            {
+                Console.WriteLine("Quantity must be positive.");
+                continue;
+            }
+
+            if (selectedProduct.stockQuantity < quantity)
+            {
+                Console.WriteLine("Not enough stock.");
+                continue;
+            }
+
+            OrderItem orderProduct = new OrderItem
+            {
+                orderId = order.orderId,
+                productId = productId,
+                quantity = quantity,
+                unitPrice = selectedProduct.price
+            };
+
+            context.OrderProducts.Add(orderProduct);
+
+            selectedProduct.stockQuantity -= quantity;
+
+            totalAmount += selectedProduct.price * quantity;
+
+            Console.Write("Add another product? yes/no: ");
+            addMore = Console.ReadLine().ToLower();
+        }
+
+        order.totalAmount = totalAmount;
+
+        context.SaveChanges();
+
+        Console.WriteLine("Order placed successfully.");
+        Console.WriteLine("Order ID: " + order.orderId);
+        Console.WriteLine("Total Amount: " + order.totalAmount);
+    }
+
+    // --------------------------------------------------
     // Case 4: Write Product Review
     // --------------------------------------------------
     static void WriteReview()
@@ -308,25 +433,25 @@ class Program
              */
 
             Console.Write("Enter review ID: ");
-        int reviewId = int.Parse(Console.ReadLine());
+            int reviewId = int.Parse(Console.ReadLine());
 
-        Review review = context.Reviews
-            .FirstOrDefault(r => r.reviewId == reviewId);
+            Review review = context.Reviews
+                .FirstOrDefault(r => r.reviewId == reviewId);
 
-        if (review == null)
-        {
-            Console.WriteLine("Review not found.");
-            return;
-        }
+            if (review == null)
+            {
+                Console.WriteLine("Review not found.");
+                return;
+            }
 
-        context.Reviews.Remove(review);
+            context.Reviews.Remove(review);
             /*
              * This tells EF Core: Delete this review from the Reviews table.
              */
             context.SaveChanges(); // This actually applies the deletion in the database.
 
-        Console.WriteLine("Review deleted successfully.");
-    }
+            Console.WriteLine("Review deleted successfully.");
+        }
 
         // --------------------------------------------------
         // Case 8: View All Products
@@ -419,125 +544,126 @@ class Program
         }
 
         static void Main()
-    {
-        while (true)
         {
-            Console.WriteLine("\n===== E-Commerce EF Core System =====");
-            Console.WriteLine("1. Register a New User");
-            Console.WriteLine("2. Add a New Product to a Category");
-            Console.WriteLine("3. Place an Order");
-            Console.WriteLine("4. Write a Product Review");
-            Console.WriteLine("5. Update Product Price and Availability");
-            Console.WriteLine("6. Cancel an Order");
-            Console.WriteLine("7. Delete a Review");
-            Console.WriteLine("8. View All Products");
-            Console.WriteLine("9. Filter Products by Category and Price Range");
-            Console.WriteLine("10. Get Category with All Its Products");
-            Console.WriteLine("11. View Order History with Full Details");
-            Console.WriteLine("12. Product Summary Report + Lazy Loading Demo");
-            Console.WriteLine("13. Add Category");
-            Console.WriteLine("0. Exit");
-            Console.Write("Choose: ");
-
-            string? choice = Console.ReadLine();
-            Console.WriteLine();
-
-
-
-            // --------------------------------------------------
-            // Main Menu
-            // --------------------------------------------------
-            static void Main(string[] args)
+            while (true)
             {
-                int choice;
+                Console.WriteLine("\n===== E-Commerce EF Core System =====");
+                Console.WriteLine("1. Register a New User");
+                Console.WriteLine("2. Add a New Product to a Category");
+                Console.WriteLine("3. Place an Order");
+                Console.WriteLine("4. Write a Product Review");
+                Console.WriteLine("5. Update Product Price and Availability");
+                Console.WriteLine("6. Cancel an Order");
+                Console.WriteLine("7. Delete a Review");
+                Console.WriteLine("8. View All Products");
+                Console.WriteLine("9. Filter Products by Category and Price Range");
+                Console.WriteLine("10. Get Category with All Its Products");
+                Console.WriteLine("11. View Order History with Full Details");
+                Console.WriteLine("12. Product Summary Report + Lazy Loading Demo");
+                Console.WriteLine("13. Add Category");
+                Console.WriteLine("0. Exit");
+                Console.Write("Choose: ");
 
-                do
+                string? choice = Console.ReadLine();
+                Console.WriteLine();
+
+
+
+                // --------------------------------------------------
+                // Main Menu
+                // --------------------------------------------------
+                static void Main(string[] args)
                 {
-                    Console.WriteLine("\n----- E-Commerce EF Core System ----");
-                    Console.WriteLine("1. Register New User");
-                    Console.WriteLine("2. Add New Product");
-                    Console.WriteLine("3. Place Order");
-                    Console.WriteLine("4. Write Product Review");
-                    Console.WriteLine("5. Update Product Price and Availability");
-                    Console.WriteLine("6. Cancel Order");
-                    Console.WriteLine("7. Delete Review");
-                    Console.WriteLine("8. View All Products");
-                    Console.WriteLine("9. Filter Products by Category and Price Range");
-                    Console.WriteLine("10. Get Category With Products");
-                    Console.WriteLine("11. View User Order History");
-                    Console.WriteLine("12. Product Summary Report");
-                    Console.WriteLine("0. Exit");
+                    int choice;
 
-                    Console.Write("Enter choice: ");
-                    int.TryParse(Console.ReadLine(), out choice);
-
-                    switch (choice)
+                    do
                     {
-                        case 1:
-                            RegisterUser();
-                            break;
+                        Console.WriteLine("\n----- E-Commerce EF Core System ----");
+                        Console.WriteLine("1. Register New User");
+                        Console.WriteLine("2. Add New Product");
+                        Console.WriteLine("3. Place Order");
+                        Console.WriteLine("4. Write Product Review");
+                        Console.WriteLine("5. Update Product Price and Availability");
+                        Console.WriteLine("6. Cancel Order");
+                        Console.WriteLine("7. Delete Review");
+                        Console.WriteLine("8. View All Products");
+                        Console.WriteLine("9. Filter Products by Category and Price Range");
+                        Console.WriteLine("10. Get Category With Products");
+                        Console.WriteLine("11. View User Order History");
+                        Console.WriteLine("12. Product Summary Report");
+                        Console.WriteLine("0. Exit");
 
-                        case 2:
-                            AddProduct();
-                            break;
+                        Console.Write("Enter choice: ");
+                        int.TryParse(Console.ReadLine(), out choice);
 
-                        case 3:
-                            //PlaceOrder();
-                            break;
+                        switch (choice)
+                        {
+                            case 1:
+                                RegisterUser();
+                                break;
 
-                        case 4:
-                            WriteReview();
-                            break;
+                            case 2:
+                                AddProduct();
+                                break;
 
-                        case 5:
-                            UpdateProduct();
-                            break;
+                            case 3:
+                                PlaceOrder();
+                                break;
 
-                        case 6:
-                            //CancelOrder();
-                            break;
+                            case 4:
+                                WriteReview();
+                                break;
 
-                        case 7:
-                            DeleteReview();
-                            break;
+                            case 5:
+                                UpdateProduct();
+                                break;
 
-                        case 8:
-                            ViewAllProducts();
-                            break;
+                            case 6:
+                                //CancelOrder();
+                                break;
 
-                        case 9:
-                            FilterProducts();
-                            break;
+                            case 7:
+                                DeleteReview();
+                                break;
 
-                        case 10:
-                            //GetCategoryWithProducts();
-                            break;
+                            case 8:
+                                ViewAllProducts();
+                                break;
 
-                        case 11:
-                            //ViewOrderHistory();
-                            break;
+                            case 9:
+                                FilterProducts();
+                                break;
 
-                        case 12:
-                            //ProductSummaryReport();
-                            break;
+                            case 10:
+                                //GetCategoryWithProducts();
+                                break;
 
-                        case 0:
-                            Console.WriteLine("Goodbye!");
-                            break;
+                            case 11:
+                                //ViewOrderHistory();
+                                break;
 
-                        default:
-                            Console.WriteLine("Invalid choice.");
-                            break;
-                    }
+                            case 12:
+                                //ProductSummaryReport();
+                                break;
 
-                    if (choice != 0)
-                    {
-                        Console.WriteLine("\nPress any key to continue...");
-                        Console.ReadKey();
-                        Console.Clear();
-                    }
+                            case 0:
+                                Console.WriteLine("Goodbye!");
+                                break;
 
-                } while (choice != 0);
+                            default:
+                                Console.WriteLine("Invalid choice.");
+                                break;
+                        }
+
+                        if (choice != 0)
+                        {
+                            Console.WriteLine("\nPress any key to continue...");
+                            Console.ReadKey();
+                            Console.Clear();
+                        }
+
+                    } while (choice != 0);
+                }
             }
         }
     }
