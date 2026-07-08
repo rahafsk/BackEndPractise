@@ -24,17 +24,36 @@ class Program
         Console.Write("Enter password: ");
         string password = Console.ReadLine();
 
-        User user = new User
+        //This object represents one new row that will be inserted into the Users table.
+        User user = new User // creates a new User object.
         {
             username = username,
+            /*
+             * The left username is the property inside the User class.
+             * The right username is the variable that stores the input from the console.
+             * So it means:Save the entered username into the user object's username property.
+             */
             email = email,
-            passwordHash = password,
+            passwordHash = password, // saves the entered password into the passwordHash property.
             registrationDate = DateTime.Now,
+            /*
+             * This stores the current date and time automatically.
+             * The user does not enter this value. The system generates it.
+             */
             isActive = true
         };
 
         context.Users.Add(user);
+        /*
+         * This tells EF Core:“I want to add this new user to the Users table.”
+         * Important: this line does not save the data permanently yet. It only marks the object as something that should be inserted.
+         */
         context.SaveChanges();
+        /*
+         * saves the user into the database.
+         * EF Core sends an SQL INSERT command to the database.
+         * After this line runs, the database generates a new userId.
+         */
 
         Console.WriteLine("User registered successfully.");
         Console.WriteLine("New User ID: " + user.userId);
