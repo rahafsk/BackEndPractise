@@ -53,4 +53,20 @@ class Program
 
         }
     }
+
+    static int ReadInt(string message)
+    {
+        Console.Write(message);
+
+        int value;
+
+        while (!int.TryParse(Console.ReadLine(), out value))
+        {
+            Console.Write("Invalid number. Try again: ");
+        }
+
+        return value;
+    }
+   
+
 }
