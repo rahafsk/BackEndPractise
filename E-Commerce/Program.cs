@@ -279,7 +279,54 @@ class Program
         Console.WriteLine("Product updated successfully.");
     }
 
+    // --------------------------------------------------
+    // Case 7: Delete Review
+    // --------------------------------------------------
+    static void DeleteReview()
+    {
+        Console.Clear();
+        Console.WriteLine("----- Delete Review -----");
 
+        var reviews = context.Reviews.ToList();
+
+        if (!reviews.Any()) // !reviews.Any() means the list is empty.
+        {
+            Console.WriteLine("No reviews found.");
+            return;
+        }
+
+        Console.WriteLine("Reviews:");
+        foreach (Review reviewItem in reviews)
+        {
+            Console.WriteLine("ID: " + reviewItem.reviewId +
+                              " | Rating: " + reviewItem.rating +
+                              " | Comment: " + reviewItem.comment);
+
+            /*
+             * This loop goes through every review in the list.
+             * Review reviewItem in reviews means: Take each review from the reviews list and temporarily call it reviewItem.
+             */
+
+            Console.Write("Enter review ID: ");
+        int reviewId = int.Parse(Console.ReadLine());
+
+        Review review = context.Reviews
+            .FirstOrDefault(r => r.reviewId == reviewId);
+
+        if (review == null)
+        {
+            Console.WriteLine("Review not found.");
+            return;
+        }
+
+        context.Reviews.Remove(review);
+            /*
+             * This tells EF Core: Delete this review from the Reviews table.
+             */
+            context.SaveChanges(); // This actually applies the deletion in the database.
+
+        Console.WriteLine("Review deleted successfully.");
+    }
 
     static void Main()
     {
@@ -304,6 +351,8 @@ class Program
 
             string? choice = Console.ReadLine();
             Console.WriteLine();
+
+
 
             // --------------------------------------------------
             // Main Menu
@@ -347,11 +396,11 @@ class Program
                             break;
 
                         case 4:
-                            //WriteReview();
+                            WriteReview();
                             break;
 
                         case 5:
-                            //UpdateProduct();
+                            UpdateProduct();
                             break;
 
                         case 6:
@@ -359,7 +408,7 @@ class Program
                             break;
 
                         case 7:
-                            //DeleteReview();
+                            DeleteReview();
                             break;
 
                         case 8:
