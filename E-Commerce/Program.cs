@@ -355,6 +355,69 @@ class Program
             }
         }
 
+        // --------------------------------------------------
+        // Case 9: Filter Products by Category and Price Range
+        // --------------------------------------------------
+        static void FilterProducts()
+        {
+            Console.Clear();
+            Console.WriteLine("----- Filter Products -----");
+
+            var categories = context.Categories.ToList();
+
+            if (!categories.Any())
+            {
+                Console.WriteLine("No categories found.");
+                return;
+            }
+
+            Console.WriteLine("Categories:");
+            foreach (Category category in categories)
+            {
+                Console.WriteLine("ID: " + category.categoryId +
+                                  " | Name: " + category.categoryName);
+            }
+
+            Console.Write("Enter category ID: ");
+            int categoryId = int.Parse(Console.ReadLine());
+
+            Console.Write("Enter minimum price: ");
+            decimal minPrice = decimal.Parse(Console.ReadLine());
+
+            Console.Write("Enter maximum price: ");
+            decimal maxPrice = decimal.Parse(Console.ReadLine());
+
+            /*
+             * This is the main part of the function.
+             * It filters the Products table using three conditions.
+             */
+            var products = context.Products
+                .Where(p => p.categoryId == categoryId && // Only show products whose category ID is equal to the category ID entered by the user.
+                            p.price >= minPrice &&  // Only show products whose price is greater than or equal to the minimum price.
+                            p.price <= maxPrice)
+                /*
+                 * .Where() is used to filter data.
+                 * It only returns products that match the condition.
+                 * Here, p means one product from the Products table.
+                 */
+                .OrderBy(p => p.price) // This sorts the filtered products by price from lowest to highest.
+                .ToList();
+
+            if (!products.Any())
+            {
+                Console.WriteLine("No products found in this filter.");
+                return;
+            }
+
+            foreach (Product product in products)
+            {
+                Console.WriteLine("ID: " + product.productId +
+                                  " | Name: " + product.productName +
+                                  " | Price: " + product.price +
+                                  " | Stock: " + product.stockQuantity);
+            }
+        }
+
         static void Main()
     {
         while (true)
@@ -439,11 +502,11 @@ class Program
                             break;
 
                         case 8:
-                            //ViewAllProducts();
+                            ViewAllProducts();
                             break;
 
                         case 9:
-                            //FilterProducts();
+                            FilterProducts();
                             break;
 
                         case 10:
