@@ -405,6 +405,55 @@ class Program
     }
 
     // --------------------------------------------------
+    // Case 6: Cancel Order
+    // --------------------------------------------------
+    static void CancelOrder()
+    {
+        Console.Clear();
+        Console.WriteLine("----- Cancel Order -----");
+
+        Console.Write("Enter order ID: ");
+        int orderId = int.Parse(Console.ReadLine());
+
+        Order order = context.Orders
+            .FirstOrDefault(o => o.orderId == orderId);
+
+        if (order == null)
+        {
+            Console.WriteLine("Order not found.");
+            return;
+        }
+
+        if (order.status == "Cancelled")
+        {
+            Console.WriteLine("Order is already cancelled.");
+            return;
+        }
+
+        var orderItems = context.OrderItems
+            .Where(i => i.orderId == orderId)
+            .ToList();
+
+        foreach (OrderItem item in orderItems)
+        {
+            Product product = context.Products
+                .FirstOrDefault(p => p.productId == item.productId);
+
+            if (product != null)
+            {
+                product.stockQuantity += item.quantity;
+            }
+        }
+
+        order.status = "Cancelled";
+
+        context.SaveChanges();
+
+        Console.WriteLine("Order cancelled successfully.");
+        Console.WriteLine("Product stock restored.");
+    }
+
+    // --------------------------------------------------
     // Case 7: Delete Review
     // --------------------------------------------------
     static void DeleteReview()

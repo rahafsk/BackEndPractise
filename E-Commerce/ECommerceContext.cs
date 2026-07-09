@@ -11,7 +11,7 @@ namespace ECommerce_System
         public DbSet<Order> Orders { get; set; }
 
         // Bridge table between Order and Product
-        public DbSet<OrderItem> OrderProducts { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
 
         public DbSet<Review> Reviews { get; set; }
 
