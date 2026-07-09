@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="E-Commerce/E-Commerce.csproj" Id="d2b70233-6a9d-406a-ae73-3e21544a0be3" />
   <Project Path="FlighManagementSystem/FlighManagementSystem.csproj" />
   <Project Path="UniversitySystem/UniversitySystem.csproj" Id="4235e639-7e54-42aa-bcf4-eaf0f2e4b934" />
 </Solution>
